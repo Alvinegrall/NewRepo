@@ -1,0 +1,152 @@
+ <html>
+<head>
+  <meta charset="UTF-8">
+  <title>Rappel d'entretien</title>
+</head>
+ <style>
+  body,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+li {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.4;
+  background-color: #f2f2f2;
+}
+
+.header {
+  margin-top: 100px;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+h1 {
+  color: #333333;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+p {
+  color: #555555;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo img {
+  max-width: 200px;
+}
+
+.button {
+  display: inline-block;
+  background-color: #4caf50;
+  color: #ffffff;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.button:hover {
+  background-color: #45a049;
+}
+
+.date-list {
+  list-style: none;
+  margin-bottom: 20px;
+}
+
+.date-list li {
+  margin-bottom: 10px;
+}
+  </style>
+
+<body>
+<div class="header">
+    <div class="container">
+      <div class="logo">
+        <img
+          src="http://jeune-agropreneur.adoobin.com/apple-touch-icon.png"
+          width="100px"
+          alt="Logo"
+        />
+      </div>
+      <h1>Rappel de notre entretien</h1>
+      <p>Dear {{user.fullName}},</p>
+      <p>
+        Notre entretien sur le thème suivant débute dans moins de {{ startDate }} heurs :
+        <br />
+        <span style="font-weight: 600">
+          " Monte ta propre usine de transformation agroalimentaire et
+          transforme là en une entreprise agroindustrielle rentable, pérenne
+          dans le temps et qui fonctionne sans toi ! En 12 mois 1:1 seulement
+          "</span
+        >
+      </p>
+      <p>
+        <span style="font-weight: 600; text-decoration: underline"
+          >Description:
+        </span>
+        Comment devenir énormément visible en tant qu'entrepreneur, gérant ou
+        indépendant de la classe moyenne allemande et obtenir un flux constant
+        de commandes de la part des clients que tu souhaites.
+      </p>
+      <ul class="date-list">
+        <li>
+          <span style="font-weight: 600">Organisateur:</span> Delors LEUWING
+          NGOUNOUO
+        </li>
+        <li><span style="font-weight: 600">Date:</span> {{appointmentDate}}</li>
+        <li>
+          <span style="font-weight: 600">Heure (Cameroun):</span> {{appointmentTime}}
+        </li>
+      </ul>
+      <p>
+        <a class="button" href="https://www.lejeuneagropreneur.com/">Visit Our Website</a>
+      </p>
+      <p class="" style="margin: 10px 0px">
+        <span style="font-weight: 600; text-decoration: underline">Lien: </span>
+        <a
+          style="color: blue"
+          href="https://event.webinarjam.com/go/live/147/z4rp3twos7s1sv"
+          >https://event.webinarjam.com/go/live/147/z4rp3twos7s1sv</a
+        >
+      </p>
+      <p>
+        <span style="font-weight: 600; text-decoration: underline">N.B : </span>
+        Assure-toi d'arriver à temps et d'avoir de quoi prendre des notes, mais
+        plus important encore, d'être prêt à passer à l'action à l’issu de
+        l’entretien 😊 !
+      </p>
+      <p>À tout à l'heure !</p>
+    </div>
+  </div>
+
+
+</body>
+</html>
+ 
+ 
+ 
