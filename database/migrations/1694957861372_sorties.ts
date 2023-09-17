@@ -14,6 +14,12 @@ export default class extends BaseSchema {
         .unsigned()
         .references("beneficiaires.id")
         .onDelete("CASCADE");
+
+      table
+        .integer("article_id")
+        .unsigned()
+        .references("articles.id")
+        .onDelete("CASCADE");
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

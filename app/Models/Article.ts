@@ -41,6 +41,9 @@ export default class Article extends BaseModel {
   public qte: number;
 
   @column()
+  public qteBefore: number;
+
+  @column()
   public categoryId: number;
 
   @column.dateTime({ autoCreate: true })

@@ -18,13 +18,26 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
+import Route from "@ioc:Adonis/Core/Route";
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
-Route.post('/login','AuthController.login');
+Route.get("/", async () => {
+  return { hello: "world" };
+});
 
+Route.group(() => {
+  Route.post("/login", "AuthController.login");
+  Route.post("/article", "ArticlesController.register");
+  Route.get("/article", "ArticlesController.getAll");
+  Route.get("/article/:code", "ArticlesController.getOne");
+
+  Route.post("/entre", "EntresController.register");
+  Route.get("/entre", "EntresController.getAll");
+  Route.get("/entre/:code", "EntresController.getOne");
+
+  Route.post("/sortie", "SortiesController.register");
+  Route.get("/sortie", "SortiesController.getAll");
+  Route.get("/sortie/:code", "SortiesController.getOne");
+}).prefix("api/v1");
 
 // Route.get('/formation/:code', 'FormationsController.getone');
 // Route.get('/blog/:code', 'BlogsController.getone');
@@ -32,4 +45,3 @@ Route.post('/login','AuthController.login');
 // Route.get('/formation', 'FormationsController.getall');
 // Route.get('/categories', 'FormationsController.getallcat');
 // Route.get('/formations', 'FormationsController.getallformation');
-

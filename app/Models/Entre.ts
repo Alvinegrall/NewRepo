@@ -9,9 +9,15 @@ export default class Entre extends BaseModel {
 
   @column()
   public code: string;
-  
+
   @column()
   public qte: string;
+
+  @column()
+  public articleId: number;
+
+  @column()
+  public fournisseurId: number;
 
   @column()
   public marque: string;
