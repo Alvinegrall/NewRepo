@@ -6,7 +6,7 @@ export default class extends BaseSeeder {
     // Write your database queries inside the run method
     await Category.createMany([
       {
-       name:"Fournitures de bureau"
+       name:"Fournitures de bureau",
       },
       {
         name:"Pause café"
