@@ -14,6 +14,9 @@ export default class Sortie extends BaseModel {
   public qte: string;
 
   @column()
+  public date: DateTime;
+  
+  @column()
   public beneficiaireId: number;
 
   @column()

@@ -22,6 +22,9 @@ export default class Entre extends BaseModel {
   @column()
   public marque: string;
 
+  @column()
+  public date: DateTime;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

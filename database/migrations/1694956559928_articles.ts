@@ -12,19 +12,19 @@ export default class extends BaseSchema {
       table.string("stock_alerte");
       table.string("stock_securite");
       table.boolean("is_active").defaultTo(false);
-      table.integer("qte").notNullable().defaultTo(0)
-      table.integer("qte_before").notNullable().defaultTo(0)
+      table.integer("qte").notNullable().defaultTo(0);
+      table.integer("qte_before").notNullable().defaultTo(0);
       table
         .integer("category_id")
         .unsigned()
         .references("categories.id")
         .onDelete("CASCADE");
 
-      // table
-      //   .integer("fournisseur_id")
-      //   .unsigned()
-      //   .references("fournisseurs.id")
-      //   .onDelete("CASCADE");
+      table
+        .integer("magasin_id")
+        .unsigned()
+        .references("magasins.id")
+        .onDelete("CASCADE");
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

@@ -11,6 +11,7 @@ import Category from "./Category";
 import Sortie from "./Sortie";
 import Entre from "./Entre";
 import Fournisseur from "./Fournisseur";
+import Magasin from "./Magasin";
 
 export default class Article extends BaseModel {
   @column({ isPrimary: true })
@@ -46,6 +47,9 @@ export default class Article extends BaseModel {
   @column()
   public categoryId: number;
 
+  @column()
+  public magasinId: number;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 
@@ -54,6 +58,10 @@ export default class Article extends BaseModel {
 
   @belongsTo(() => Category)
   public category: BelongsTo<typeof Category>;
+
+  @belongsTo(() => Magasin)
+  public magasin: BelongsTo<typeof Magasin>;
+
   @hasMany(() => Sortie)
   public sortie: HasMany<typeof Sortie>;
 

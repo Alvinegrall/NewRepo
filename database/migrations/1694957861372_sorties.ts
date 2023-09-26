@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments("id");
       table.string("code").unique().notNullable();
       table.string("qte").notNullable();
+      table.dateTime("date");
 
       table
         .integer("beneficiaire_id")

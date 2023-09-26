@@ -2,6 +2,7 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Article from "App/Models/Article";
 import Entre from "App/Models/Entre";
 import Fournisseur from "App/Models/Fournisseur";
+import Log from "App/Models/Log";
 
 export default class EntresController {
   public async register({ request, response }: HttpContextContract) {
@@ -25,6 +26,18 @@ export default class EntresController {
       article.qte = Number(article.qte) + Number(qte);
 
       await article.save();
+
+      const logs = new Log();
+      (logs.name = "Creation"),
+        (logs.description =
+          "Vous avez reçu une livraison de " +
+          article.name +
+          " de " +
+          fournisseur.name),
+        (logs.sourceName = "entre");
+      logs.sourceId = entre.id;
+
+      await logs.save();
 
       return response.status(200).json({
         error: false,

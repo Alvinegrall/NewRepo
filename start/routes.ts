@@ -34,6 +34,22 @@ Route.group(() => {
   Route.get("/entre", "EntresController.getAll");
   Route.get("/entre/:code", "EntresController.getOne");
 
+  Route.post("/cat", "CategoriesController.register");
+  Route.get("/cat", "CategoriesController.getAll");
+  Route.get("/cat/:id", "CategoriesController.getOne");
+
+  Route.post("/fournisseur", "FournisseursController.register");
+  Route.get("/fournisseur", "FournisseursController.getAll");
+  Route.get("/fournisseur/:id", "FournisseursController.getOne");
+
+  Route.post("/beneficiaire", "BeneficiairesController.register");
+  Route.get("/beneficiaire", "BeneficiairesController.getAll");
+  Route.get("/beneficiaire/:id", "BeneficiairesController.getOne");
+
+  Route.post("/magasin", "MagasinsController.register");
+  Route.get("/magasin", "MagasinsController.getAll");
+  Route.get("/magasin/:id", "MagasinsController.getOne");
+
   Route.post("/sortie", "SortiesController.register");
   Route.get("/sortie", "SortiesController.getAll");
   Route.get("/sortie/:code", "SortiesController.getOne");
