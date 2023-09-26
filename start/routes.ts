@@ -50,6 +50,8 @@ Route.group(() => {
   Route.get("/magasin", "MagasinsController.getAll");
   Route.get("/magasin/:id", "MagasinsController.getOne");
 
+  Route.get("/logs", "LogsController.getAll");
+
   Route.post("/sortie", "SortiesController.register");
   Route.get("/sortie", "SortiesController.getAll");
   Route.get("/sortie/:code", "SortiesController.getOne");

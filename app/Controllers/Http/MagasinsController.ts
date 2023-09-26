@@ -1,4 +1,5 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import Log from "App/Models/Log";
 import Magasin from "App/Models/Magasin";
 
 export default class MagasinsController {
@@ -11,6 +12,15 @@ export default class MagasinsController {
       magasin.name = name;
 
       await magasin.save();
+
+      const logs = new Log();
+      (logs.name = "Creation"),
+        (logs.description =
+          "Vous avez crée un nouveau Magasin <b> " + magasin.name + " </b>"),
+        (logs.sourceName = "magasin");
+      logs.sourceId = magasin.id;
+
+      await logs.save();
 
       return response.status(200).json({
         error: false,

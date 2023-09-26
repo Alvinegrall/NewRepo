@@ -34,7 +34,7 @@ export default class SortiesController {
       const logs = new Log();
       (logs.name = "Creation"),
         (logs.description =
-          "Vous avez reçu une sortie de <b> " +
+          "Vous avez effectué une sortie de <b> " +
           article.name +
           "</b> vers le département <b> " +
           beneficiaire.name) + " </b>",

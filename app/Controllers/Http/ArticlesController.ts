@@ -30,7 +30,7 @@ export default class ArticlesController {
       const logs = new Log();
       (logs.name = "Creation"),
         (logs.description =
-          "Vous avez crée un un article <b> " + article.name + " </b>"),
+          "Vous avez crée un article <b> " + article.name + " </b>"),
         (logs.sourceName = "articles");
       logs.sourceId = article.id;
 
