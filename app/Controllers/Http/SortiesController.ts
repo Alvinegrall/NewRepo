@@ -28,6 +28,12 @@ export default class SortiesController {
       await sortie.save();
 
       article.qteBefore = article.qte;
+      if (Number(article.qte) <= Number(qte)) {
+        return response.status(500).json({
+          error: true,
+          message: "Quantité insuffisante",
+        });
+      }
       article.qte = Number(article.qte) - Number(qte);
       await article.save();
 
@@ -36,7 +42,9 @@ export default class SortiesController {
         (logs.description =
           "Vous avez effectué une sortie de <b> " +
           article.name +
-          "</b> vers le département <b> " +
+          "</b> <b>( " +
+          qte +
+          " )</b> vers le département <b> " +
           beneficiaire.name) + " </b>",
         (logs.sourceName = "sortie");
       logs.sourceId = sortie.id;
