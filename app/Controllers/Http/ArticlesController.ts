@@ -56,13 +56,12 @@ export default class ArticlesController {
   public async getAll({ response }: any) {
     try {
       const article = await Article.query()
-        .where("is_active",true)
+        .where("is_active", true)
         .preload("category")
         .preload("magasin")
         .preload("entre")
         .preload("sortie")
-        .orderBy("id", "desc")
-
+        .orderBy("id", "desc");
 
       return response.status(200).json({ error: false, data: article });
     } catch (error) {
@@ -89,6 +88,23 @@ export default class ArticlesController {
         error: true,
         message: "Erreur lors de la récupération" + error,
       });
+    }
+  }
+  public async delete({ params, response }: any) {
+    try {
+      const val = await Article.query().where("id", params.id).firstOrFail();
+
+      val.isActive = false;
+
+      await val.save();
+
+      return response
+        .status(200)
+        .json({ error: false, data: "Supprimé avec success" });
+    } catch (error) {
+      return response
+        .status(500)
+        .json({ error: true, message: "Erreur lors de la suppression" });
     }
   }
   // public async delete({ params, response }: any) {

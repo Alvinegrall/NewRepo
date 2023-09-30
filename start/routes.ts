@@ -28,26 +28,32 @@ Route.group(() => {
   Route.post("/article", "ArticlesController.register");
   Route.get("/article", "ArticlesController.getAll");
   Route.get("/article/:code", "ArticlesController.getOne");
+  Route.delete("/article/:id/delete", "ArticlesController.delete");
 
   Route.post("/entre", "EntresController.register");
   Route.get("/entre", "EntresController.getAll");
   Route.get("/entre/:code", "EntresController.getOne");
+  Route.delete("/entre/:id/delete", "EntresController.delete");
 
   Route.post("/cat", "CategoriesController.register");
   Route.get("/cat", "CategoriesController.getAll");
   Route.get("/cat/:id", "CategoriesController.getOne");
+  Route.delete("/cat/:id/delete", "CategoriesController.delete");
 
   Route.post("/fournisseur", "FournisseursController.register");
   Route.get("/fournisseur", "FournisseursController.getAll");
   Route.get("/fournisseur/:id", "FournisseursController.getOne");
+  Route.delete("/fournisseur/:id/delete", "FournisseursController.delete");
 
   Route.post("/beneficiaire", "BeneficiairesController.register");
   Route.get("/beneficiaire", "BeneficiairesController.getAll");
   Route.get("/beneficiaire/:id", "BeneficiairesController.getOne");
+  Route.delete("/beneficiaire/:id/delete", "BeneficiairesController.delete");
 
   Route.post("/magasin", "MagasinsController.register");
   Route.get("/magasin", "MagasinsController.getAll");
   Route.get("/magasin/:id", "MagasinsController.getOne");
+  Route.delete("/magasin/:id/delete", "MagasinsController.delete");
 
   Route.get("/logs", "LogsController.getAll");
   Route.delete("/logs/:id/delete", "LogsController.delete");
@@ -56,6 +62,7 @@ Route.group(() => {
   Route.post("/sortie", "SortiesController.register");
   Route.get("/sortie", "SortiesController.getAll");
   Route.get("/sortie/:code", "SortiesController.getOne");
+  Route.delete("/sortie/:id/delete", "SortiesController.delete");
 })
   .prefix("api/v1")
   .middleware("auth");

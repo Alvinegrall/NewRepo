@@ -108,4 +108,22 @@ export default class SortiesController {
       });
     }
   }
+
+  public async delete({ params, response }: any) {
+    try {
+      const val = await Sortie.query().where("id", params.id).firstOrFail();
+
+      val.isActive = false;
+
+      await val.save();
+
+      return response
+        .status(200)
+        .json({ error: false, data: "Supprimé avec success" });
+    } catch (error) {
+      return response
+        .status(500)
+        .json({ error: true, message: "Erreur lors de la suppression" });
+    }
+  }
 }
