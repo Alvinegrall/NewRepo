@@ -35,6 +35,15 @@ export default class SortiesController {
         });
       }
       article.qte = Number(article.qte) - Number(qte);
+
+      if (Number(article.stock_alerte) < Number(article.qte)) {
+        console.log("if case");
+        article.is_alert = false;
+      } else {
+        console.log("elese if case");
+
+        article.is_alert = true;
+      }
       await article.save();
 
       const logs = new Log();
@@ -68,7 +77,9 @@ export default class SortiesController {
     try {
       const sortie = await Sortie.query()
         .preload("article")
-        .preload("beneficiaire");
+        .preload("beneficiaire")
+        .orderBy("id", "desc")
+
 
       return response.status(200).json({ error: false, data: sortie });
     } catch (error) {

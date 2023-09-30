@@ -23,6 +23,10 @@ export default class ArticlesController {
         (article.categoryId = cat.id);
       article.magasinId = magasin.id;
 
+      if (Number(stock_alerte) > 0) {
+        article.is_alert = true;
+      }
+
       await article.save();
 
       // save logs
@@ -55,7 +59,9 @@ export default class ArticlesController {
         .preload("category")
         .preload("magasin")
         .preload("entre")
-        .preload("sortie");
+        .preload("sortie")
+        .orderBy("id", "desc")
+
 
       return response.status(200).json({ error: false, data: article });
     } catch (error) {

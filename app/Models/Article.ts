@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import {
   BaseModel,
+  beforeFetch,
   BelongsTo,
   belongsTo,
   column,
@@ -39,6 +40,9 @@ export default class Article extends BaseModel {
   public is_active: boolean;
 
   @column()
+  public is_alert: boolean;
+
+  @column()
   public qte: number;
 
   @column()
@@ -67,4 +71,9 @@ export default class Article extends BaseModel {
 
   @hasMany(() => Entre)
   public entre: HasMany<typeof Entre>;
+
+  // @beforeFetch()
+  // public static setStockAlerte(query: any) {
+  //   console.log(this);
+  // }
 }

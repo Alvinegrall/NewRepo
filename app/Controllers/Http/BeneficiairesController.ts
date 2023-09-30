@@ -39,7 +39,9 @@ export default class BeneficiairesController {
 
   public async getAll({ response }: any) {
     try {
-      const beneficiaire = await Beneficiaire.query().preload("sortie");
+      const beneficiaire = await Beneficiaire.query().preload("sortie", (q) =>
+        q.preload("article")
+      );
 
       return response.status(200).json({ error: false, data: beneficiaire });
     } catch (error) {

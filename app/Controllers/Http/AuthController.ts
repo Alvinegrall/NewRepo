@@ -15,10 +15,9 @@ export default class AuthController {
             },
           })
         } catch {
-          return response.ok({
-            error: true,
-            message: 'Identifiants de connexion invalides.',
-          })
+          return response
+          .status(500)
+          .json({ error: true, message: "Erreur lors de la création" });
         }
       }
       public async profile({ auth, response }: HttpContextContract) {

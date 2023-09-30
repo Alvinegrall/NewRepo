@@ -24,6 +24,10 @@ export default class EntresController {
       await entre.save();
       article.qteBefore = article.qte;
       article.qte = Number(article.qte) + Number(qte);
+      
+      if (Number(article.stock_alerte) < Number(article.qte)) {
+        article.is_alert = false;
+      }
 
       await article.save();
 
@@ -55,7 +59,8 @@ export default class EntresController {
     try {
       const entre = await Entre.query()
         .preload("article")
-        .preload("fournisseur");
+        .preload("fournisseur")
+        .orderBy("id", "desc")
 
       return response.status(200).json({ error: false, data: entre });
     } catch (error) {

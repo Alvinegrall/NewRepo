@@ -23,9 +23,8 @@ import Route from "@ioc:Adonis/Core/Route";
 Route.get("/", async () => {
   return { hello: "world" };
 });
-
+Route.post("api/v1/login", "AuthController.login");
 Route.group(() => {
-  Route.post("/login", "AuthController.login");
   Route.post("/article", "ArticlesController.register");
   Route.get("/article", "ArticlesController.getAll");
   Route.get("/article/:code", "ArticlesController.getOne");
@@ -51,11 +50,14 @@ Route.group(() => {
   Route.get("/magasin/:id", "MagasinsController.getOne");
 
   Route.get("/logs", "LogsController.getAll");
+  Route.get("/home-page-data", "HomePageDataController.getHomePageData");
 
   Route.post("/sortie", "SortiesController.register");
   Route.get("/sortie", "SortiesController.getAll");
   Route.get("/sortie/:code", "SortiesController.getOne");
-}).prefix("api/v1");
+})
+  .prefix("api/v1")
+  .middleware("auth");
 
 // Route.get('/formation/:code', 'FormationsController.getone');
 // Route.get('/blog/:code', 'BlogsController.getone');
