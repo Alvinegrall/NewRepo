@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, beforeFetch, column } from "@ioc:Adonis/Lucid/Orm";
 
 export default class Log extends BaseModel {
   @column({ isPrimary: true })
@@ -10,6 +10,9 @@ export default class Log extends BaseModel {
 
   @column()
   public description: String;
+
+  @column({ serialize: Boolean })
+  public isActive: boolean;
 
   @column()
   public sourceName: String;
@@ -28,4 +31,9 @@ export default class Log extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
+
+  @beforeFetch()
+  public static getActive(query: any) {
+    query.where("is_active", true);
+  }
 }

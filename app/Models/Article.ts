@@ -36,8 +36,8 @@ export default class Article extends BaseModel {
   @column()
   public stock_securite: string;
 
-  @column()
-  public is_active: boolean;
+  @column({ serialize: Boolean })
+  public isActive: boolean;
 
   @column()
   public is_alert: boolean;
@@ -72,8 +72,8 @@ export default class Article extends BaseModel {
   @hasMany(() => Entre)
   public entre: HasMany<typeof Entre>;
 
-  // @beforeFetch()
-  // public static setStockAlerte(query: any) {
-  //   console.log(this);
-  // }
+  @beforeFetch()
+  public static getActive(query: any) {
+    query.where("is_active", true);
+  }
 }

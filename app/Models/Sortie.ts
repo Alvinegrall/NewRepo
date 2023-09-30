@@ -1,5 +1,11 @@
 import { DateTime } from "luxon";
-import { BaseModel, BelongsTo, belongsTo, column } from "@ioc:Adonis/Lucid/Orm";
+import {
+  BaseModel,
+  beforeFetch,
+  BelongsTo,
+  belongsTo,
+  column,
+} from "@ioc:Adonis/Lucid/Orm";
 import Article from "./Article";
 import Beneficiaire from "./Beneficiaire";
 
@@ -13,9 +19,12 @@ export default class Sortie extends BaseModel {
   @column()
   public qte: string;
 
+  @column({ serialize: Boolean })
+  public isActive: boolean;
+
   @column()
   public date: DateTime;
-  
+
   @column()
   public beneficiaireId: number;
 
@@ -33,4 +42,9 @@ export default class Sortie extends BaseModel {
 
   @belongsTo(() => Beneficiaire)
   public beneficiaire: BelongsTo<typeof Beneficiaire>;
+
+  @beforeFetch()
+  public static getActive(query: any) {
+    query.where("is_active", true);
+  }
 }

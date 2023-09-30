@@ -1,4 +1,4 @@
-import { column, BaseModel, hasMany, HasMany } from "@ioc:Adonis/Lucid/Orm";
+import { column, BaseModel, hasMany, HasMany, beforeFetch } from "@ioc:Adonis/Lucid/Orm";
 import { DateTime } from "luxon";
 import Article from "./Article";
 
@@ -8,6 +8,9 @@ export default class Category extends BaseModel {
 
   @column()
   public name: string;
+
+  @column({ serialize: Boolean })
+  public isActive: boolean;
 
   // @column()
   // public code: string;
@@ -20,4 +23,9 @@ export default class Category extends BaseModel {
 
   @hasMany(() => Article)
   public articles: HasMany<typeof Article>;
+
+  @beforeFetch()
+  public static getActive(query: any) {
+    query.where("is_active", true);
+  }
 }

@@ -9,6 +9,7 @@ export default class extends BaseSchema {
       table.string("code").unique().notNullable();
       table.string("qte").notNullable();
       table.dateTime("date");
+      table.boolean("is_active").defaultTo(true)
 
       table
         .integer("beneficiaire_id")

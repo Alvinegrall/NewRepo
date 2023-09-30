@@ -26,7 +26,9 @@ export default class FournisseursController {
 
   public async getAll({ response }: any) {
     try {
-      const fournisseur = await Fournisseur.query().preload("entre");
+      const fournisseur = await Fournisseur.query()
+        .where("is_active", true)
+        .preload("entre");
 
       return response.status(200).json({ error: false, data: fournisseur });
     } catch (error) {

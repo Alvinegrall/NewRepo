@@ -10,6 +10,7 @@ export default class extends BaseSchema {
       table.string("qte");
       table.string("marque");
       table.dateTime("date");
+      table.boolean("is_active").defaultTo(true)
 
       table
         .integer("fournisseur_id")

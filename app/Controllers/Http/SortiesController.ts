@@ -76,10 +76,11 @@ export default class SortiesController {
   public async getAll({ response }: any) {
     try {
       const sortie = await Sortie.query()
+        .where("is_active", true)
+
         .preload("article")
         .preload("beneficiaire")
-        .orderBy("id", "desc")
-
+        .orderBy("id", "desc");
 
       return response.status(200).json({ error: false, data: sortie });
     } catch (error) {

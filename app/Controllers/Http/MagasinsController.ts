@@ -36,7 +36,9 @@ export default class MagasinsController {
 
   public async getAll({ response }: any) {
     try {
-      const magasin = await Magasin.query().preload("articles");
+      const magasin = await Magasin.query()
+        .where("is_active", true)
+        .preload("articles");
 
       return response.status(200).json({ error: false, data: magasin });
     } catch (error) {

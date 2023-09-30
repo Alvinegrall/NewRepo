@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeFetch, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Article from './Article'
 import Fournisseur from './Fournisseur'
 
@@ -25,6 +25,9 @@ export default class Entre extends BaseModel {
   @column()
   public date: DateTime;
 
+  @column({ serialize: Boolean })
+  public isActive: boolean;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -36,4 +39,9 @@ export default class Entre extends BaseModel {
 
   @belongsTo(() => Fournisseur)
   public fournisseur: BelongsTo<typeof Fournisseur>;
+
+  @beforeFetch()
+  public static getActive(query: any) {
+    query.where("is_active", true);
+  }
 }

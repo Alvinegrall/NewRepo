@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.string("name");
       table.string("description");
       table.boolean("status");
-      table.boolean("is_active");
+      table.boolean("is_active").defaultTo(true);
       table.string("source_name");
       table.integer("source_id");
 

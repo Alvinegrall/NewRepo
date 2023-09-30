@@ -50,6 +50,7 @@ Route.group(() => {
   Route.get("/magasin/:id", "MagasinsController.getOne");
 
   Route.get("/logs", "LogsController.getAll");
+  Route.delete("/logs/:id/delete", "LogsController.delete");
   Route.get("/home-page-data", "HomePageDataController.getHomePageData");
 
   Route.post("/sortie", "SortiesController.register");

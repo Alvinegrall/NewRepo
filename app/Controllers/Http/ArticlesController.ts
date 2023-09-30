@@ -56,6 +56,7 @@ export default class ArticlesController {
   public async getAll({ response }: any) {
     try {
       const article = await Article.query()
+        .where("is_active",true)
         .preload("category")
         .preload("magasin")
         .preload("entre")

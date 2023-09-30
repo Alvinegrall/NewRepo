@@ -58,6 +58,7 @@ export default class EntresController {
   public async getAll({ response }: any) {
     try {
       const entre = await Entre.query()
+      .where("is_active",true)
         .preload("article")
         .preload("fournisseur")
         .orderBy("id", "desc")

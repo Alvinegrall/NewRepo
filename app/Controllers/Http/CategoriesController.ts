@@ -37,7 +37,9 @@ export default class CategoriesController {
 
   public async getAll({ response }: any) {
     try {
-      const categorie = await Category.query().preload("articles");
+      const categorie = await Category.query()
+        .where("is_active", true)
+        .preload("articles");
 
       return response.status(200).json({ error: false, data: categorie });
     } catch (error) {

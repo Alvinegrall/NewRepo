@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { BaseModel, column, HasMany, hasMany } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, beforeFetch, column, HasMany, hasMany } from "@ioc:Adonis/Lucid/Orm";
 import Entre from "./Entre";
 
 export default class Fournisseur extends BaseModel {
@@ -8,6 +8,9 @@ export default class Fournisseur extends BaseModel {
 
   @column()
   public name: string;
+
+  @column({ serialize: Boolean })
+  public isActive: boolean;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
@@ -20,4 +23,9 @@ export default class Fournisseur extends BaseModel {
 
   @hasMany(() => Entre)
   public entre: HasMany<typeof Entre>;
+
+  @beforeFetch()
+  public static getActive(query: any) {
+    query.where("is_active", true);
+  }
 }

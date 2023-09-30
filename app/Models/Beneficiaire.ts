@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeFetch, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Sortie from './Sortie'
 
 export default class Beneficiaire extends BaseModel {
@@ -9,6 +9,9 @@ export default class Beneficiaire extends BaseModel {
   @column()
   public name: string
 
+  @column({ serialize: Boolean })
+  public isActive: boolean;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -17,4 +20,9 @@ export default class Beneficiaire extends BaseModel {
 
   @hasMany(() => Sortie)
   public sortie: HasMany<typeof Sortie>
+
+  @beforeFetch()
+  public static getActive(query: any) {
+    query.where("is_active", true);
+  }
 }

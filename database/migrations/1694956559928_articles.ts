@@ -12,7 +12,7 @@ export default class extends BaseSchema {
       table.string("stock_alerte");
       table.string("stock_securite");
       table.boolean("is_alert").defaultTo(true);
-      table.boolean("is_active").defaultTo(false);
+      table.boolean("is_active").defaultTo(true);
       table.integer("qte").notNullable().defaultTo(0);
       table.integer("qte_before").notNullable().defaultTo(0);
       table
