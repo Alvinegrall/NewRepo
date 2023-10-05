@@ -1,4 +1,5 @@
 import BaseSeeder from "@ioc:Adonis/Lucid/Seeder";
+import DateTimeHelpers from "App/Helpers/DateTimeHelpers";
 import Cycle from "App/Models/Cycle";
 
 export default class extends BaseSeeder {
@@ -13,14 +14,13 @@ export default class extends BaseSeeder {
     }
 
     await Cycle.create({
-      dateDebut: new Date(Date.now())
-        .toISOString()
-        .slice(0, 16)
-        .replace("T", " "),
-      dateFin: new Date(new Date().setMonth(new Date().getMonth() + 1))
-        .toISOString()
-        .slice(0, 16)
-        .replace("T", " "),
+      dateDebut: DateTimeHelpers.now(),
+      // dateFin: new Date(new Date().setMonth(new Date().getMonth() + 1))
+      //   .toISOString()
+      //   .slice(0, 16)
+      //   .replace("T", " "),
+      dateFin: DateTimeHelpers.addMonth(DateTimeHelpers.now(), 1),
+      // add
       code: code,
     });
   }

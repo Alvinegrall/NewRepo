@@ -47,17 +47,23 @@ export default class CyclesController {
   public async getOne({ params, response }: any) {
     try {
       const cycles = await Cycle.query()
-        .where("code", params.code)
+        .where("code", params.cycle_code)
         .preload("entres")
         .preload("sortie")
         .preload("logs")
         .firstOrFail();
 
+    
+
+
+
+
+
       return response.status(200).json({ error: false, data: cycles });
     } catch (error) {
       return response
         .status(500)
-        .json({ error: true, message: "Erreur lors de la création" });
+        .json({ error: true, message: "Erreur lors de la création"+ error });
     }
   }
 

@@ -6,8 +6,8 @@ export default class extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments("id");
-      table.date("date_debut").notNullable();
-      table.date("date_fin").notNullable();
+      table.dateTime("date_debut").notNullable();
+      table.dateTime("date_fin").notNullable();
       table.string("code").notNullable();
       table.boolean("is_default").defaultTo(true);
       table.boolean("is_active").defaultTo(true);

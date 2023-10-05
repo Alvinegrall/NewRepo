@@ -17,8 +17,6 @@ export default class extends BaseSeeder {
         {
           name:"Aura"
         }
-       
-  
       ])
       
   }

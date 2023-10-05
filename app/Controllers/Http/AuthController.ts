@@ -9,7 +9,7 @@ export default class AuthController {
     try {
       const data = await auth
         .use("api")
-        .attempt(email, password, { expiresIn: "30 mins" });
+        .attempt(email, password, { expiresIn: "7 days" });
 
       const cycle = await Cycle.query()
         .where("is_active", true)

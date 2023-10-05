@@ -9,6 +9,7 @@ import Env from '@ioc:Adonis/Core/Env'
 import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
 
 const databaseConfig: DatabaseConfig = {
+  
   /*
   |--------------------------------------------------------------------------
   | Connection
@@ -41,6 +42,7 @@ const databaseConfig: DatabaseConfig = {
         user: Env.get('MYSQL_USER'),
         password: Env.get('MYSQL_PASSWORD', ''),
         database: Env.get('MYSQL_DB_NAME'),
+        timezone: '+01:00'
       },
       migrations: {
         naturalSort: true,

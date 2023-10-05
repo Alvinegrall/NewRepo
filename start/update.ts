@@ -7,6 +7,7 @@
 | boot.
 |
 */
+import DateTimeHelpers from "App/Helpers/DateTimeHelpers";
 import Cycle from "App/Models/Cycle";
 import cron from "node-cron";
 const updateDatabase = async () => {
@@ -29,6 +30,7 @@ const updateDatabase = async () => {
         element.isPassed = true;
         element.isArchive = true;
         element.isDefault = false;
+        await element.save();
         // create new cycle
         let code = "CYCLE-" + Math.floor(Math.random() * 1000000);
         //   check if code exist in database and generate another one if it does
@@ -39,23 +41,12 @@ const updateDatabase = async () => {
         }
         const cycle = new Cycle();
         // date_debut is a DateTime
-        (cycle.dateDebut = new Date(Date.now())
-          .toISOString()
-          .slice(0, 16)
-          .replace("T", " ")),
-          (cycle.dateFin = new Date(
-            new Date().setMonth(new Date().getMonth() + 1)
-          )
-            .toISOString()
-            .slice(0, 16)
-            .replace("T", " ")),
+        (cycle.dateDebut = DateTimeHelpers.now()),
+          (cycle.dateFin = DateTimeHelpers.addMonth(DateTimeHelpers.now(), 1)),
           (cycle.code = code);
-        cycle.save();
-      }
-      else{
-        console.log("okkk ++");
-        
-      }
+
+        await cycle.save();
+      } 
     });
   } catch (error) {
     console.log(error);
