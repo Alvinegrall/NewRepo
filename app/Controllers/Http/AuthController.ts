@@ -11,34 +11,34 @@ export default class AuthController {
         .use("api")
         .attempt(email, password, { expiresIn: "7 days" });
 
-      const cycle = await Cycle.query()
-        .where("is_active", true)
-        .where("is_passed", false)
-        .first();
+      // const cycle = await Cycle.query()
+      //   .where("is_active", true)
+      //   .where("is_passed", false)
+      //   .first();
 
-      if (!cycle) {
-        let code = "CYCLE-" + Math.floor(Math.random() * 1000000);
-        //   check if code exist in database and generate another one if it does
-        let cycle_code = await Cycle.findBy("code", code);
-        while (cycle_code) {
-          code = "CYCLE-" + Math.floor(Math.random() * 1000000);
-          cycle_code = await Cycle.findBy("code", code);
-        }
-        const cycle = new Cycle();
-        // date_debut is a DateTime
-        (cycle.dateDebut = new Date(Date.now())
-          .toISOString()
-          .slice(0, 16)
-          .replace("T", " ")),
-          (cycle.dateFin = new Date(
-            new Date().setMonth(new Date().getMonth() + 1)
-          )
-            .toISOString()
-            .slice(0, 16)
-            .replace("T", " ")),
-          (cycle.code = code);
-        cycle.save();
-      }
+      // if (!cycle) {
+      //   let code = "CYCLE-" + Math.floor(Math.random() * 1000000);
+      //   //   check if code exist in database and generate another one if it does
+      //   let cycle_code = await Cycle.findBy("code", code);
+      //   while (cycle_code) {
+      //     code = "CYCLE-" + Math.floor(Math.random() * 1000000);
+      //     cycle_code = await Cycle.findBy("code", code);
+      //   }
+      //   const cycle = new Cycle();
+      //   // date_debut is a DateTime
+      //   (cycle.dateDebut = new Date(Date.now())
+      //     .toISOString()
+      //     .slice(0, 16)
+      //     .replace("T", " ")),
+      //     (cycle.dateFin = new Date(
+      //       new Date().setMonth(new Date().getMonth() + 1)
+      //     )
+      //       .toISOString()
+      //       .slice(0, 16)
+      //       .replace("T", " ")),
+      //     (cycle.code = code);
+      //   cycle.save();
+      // }
 
       return response.ok({
         error: false,

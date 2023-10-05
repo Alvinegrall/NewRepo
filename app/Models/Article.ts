@@ -76,4 +76,5 @@ export default class Article extends BaseModel {
   public static getActive(query: any) {
     query.where("is_active", true);
   }
+  
 }

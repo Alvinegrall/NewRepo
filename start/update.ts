@@ -42,7 +42,7 @@ const updateDatabase = async () => {
         const cycle = new Cycle();
         // date_debut is a DateTime
         (cycle.dateDebut = DateTimeHelpers.now()),
-          (cycle.dateFin = DateTimeHelpers.addMonth(DateTimeHelpers.now(), 1)),
+          (cycle.dateFin = DateTimeHelpers.addMinutes(DateTimeHelpers.now(), 5)),
           (cycle.code = code);
 
         await cycle.save();

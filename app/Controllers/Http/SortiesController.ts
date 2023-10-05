@@ -13,8 +13,15 @@ export default class SortiesController {
         request.body();
       //   const fournisseur = await Fournisseur.findByOrFail("id", fournisseur_id);
 
-      const cycle = await Cycle.findByOrFail("code", cycle_code);
+      const cycle = await Cycle.query().where("code", cycle_code).firstOrFail();
 
+      if (cycle.isPassed) {
+        return response.status(500).json({
+          error: true,
+          message: "Ce cycle est cloturé",
+        });
+      }
+      
       const beneficiaire = await Beneficiaire.findByOrFail(
         "id",
         beneficiaire_id

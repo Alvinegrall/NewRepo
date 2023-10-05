@@ -34,7 +34,8 @@ export default class CyclesController {
         .where("is_active", true)
         .preload("entres")
         .preload("sortie")
-        .preload("logs");
+        .preload("logs")
+        .orderBy("id", "desc");
 
       return response.status(200).json({ error: false, data: cycle });
     } catch (error) {
@@ -46,24 +47,25 @@ export default class CyclesController {
 
   public async getOne({ params, response }: any) {
     try {
+      const cycle = await Cycle.query().where("is_Active", true);
+
+      cycle.forEach(async (element: any) => {
+        element.isDefault = false;
+        await element.save();
+      });
+
       const cycles = await Cycle.query()
         .where("code", params.cycle_code)
-        .preload("entres")
-        .preload("sortie")
-        .preload("logs")
         .firstOrFail();
 
-    
-
-
-
-
+      cycles.isDefault = true;
+      await cycles.save();
 
       return response.status(200).json({ error: false, data: cycles });
     } catch (error) {
       return response
         .status(500)
-        .json({ error: true, message: "Erreur lors de la création"+ error });
+        .json({ error: true, message: "Erreur lors de la création" + error });
     }
   }
 
@@ -71,7 +73,7 @@ export default class CyclesController {
     try {
       const cycles = await Cycle.query()
         .where("is_active", true)
-        .where("is_passed", false)
+        .where("is_default", true)
         .preload("entres")
         .preload("sortie")
         .preload("logs")
