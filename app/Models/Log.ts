@@ -22,6 +22,9 @@ export default class Log extends BaseModel {
   public sourceId: number;
 
   @column()
+  public cycleId: number;
+
+  @column()
   public status: Boolean;
 
   @column()

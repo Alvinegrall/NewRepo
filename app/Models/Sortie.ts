@@ -27,6 +27,9 @@ export default class Sortie extends BaseModel {
   public date: DateTime;
 
   @column()
+  public cycleId: number;
+
+  @column()
   public beneficiaireId: number;
 
   @column()

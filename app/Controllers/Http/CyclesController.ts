@@ -6,7 +6,14 @@ export default class CyclesController {
   public async register({ request, response }: any) {
     try {
       const { date_debut, date_fin } = request.body();
-      const code = "CYCLE-" + Math.floor(Math.random() * 1000000);
+      let code = "CYCLE-" + Math.floor(Math.random() * 1000000);
+      //   check if code exist in database and generate another one if it does
+      let cycle_code = await Cycle.findBy("code", code);
+
+      while (cycle_code) {
+        code = "CYCLE-" + Math.floor(Math.random() * 1000000);
+        cycle_code = await Cycle.findBy("code", code);
+      }
 
       const cycle = new Cycle();
       cycle.dateDebut = date_debut;

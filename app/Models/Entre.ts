@@ -27,6 +27,9 @@ export default class Entre extends BaseModel {
   public fournisseurId: number;
 
   @column()
+  public cycleId: number;
+
+  @column()
   public marque: string;
 
   @column()

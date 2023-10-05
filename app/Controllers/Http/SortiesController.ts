@@ -2,15 +2,19 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 import Article from "App/Models/Article";
 import Beneficiaire from "App/Models/Beneficiaire";
+import Cycle from "App/Models/Cycle";
 import Log from "App/Models/Log";
 import Sortie from "App/Models/Sortie";
 
 export default class SortiesController {
   public async register({ request, response }: HttpContextContract) {
     try {
-      const { code_article, beneficiaire_id, qte, date } = request.body();
-
+      const { code_article, beneficiaire_id, qte, date, cycle_code } =
+        request.body();
       //   const fournisseur = await Fournisseur.findByOrFail("id", fournisseur_id);
+
+      const cycle = await Cycle.findByOrFail("code", cycle_code);
+
       const beneficiaire = await Beneficiaire.findByOrFail(
         "id",
         beneficiaire_id
@@ -24,6 +28,7 @@ export default class SortiesController {
       sortie.beneficiaireId = beneficiaire.id;
       sortie.articleId = article.id;
       sortie.date = date;
+      sortie.cycleId = cycle.id;
 
       await sortie.save();
 
@@ -57,6 +62,7 @@ export default class SortiesController {
           beneficiaire.name) + " </b>",
         (logs.sourceName = "sortie");
       logs.sourceId = sortie.id;
+      logs.cycleId = cycle.id;
 
       await logs.save();
 
@@ -73,14 +79,22 @@ export default class SortiesController {
     }
   }
 
-  public async getAll({ response }: any) {
+  public async getAll({ response, params }: any) {
     try {
+      const cycle = await Cycle.findByOrFail("code", params.cycle_code);
+
       const sortie = await Sortie.query()
         .where("is_active", true)
-
+        .where("cycle_id", cycle.id)
         .preload("article")
         .preload("beneficiaire")
         .orderBy("id", "desc");
+
+      // const sortie = await Sortie.query()
+      //   .where("is_active", true)
+      //   .preload("article")
+      //   .preload("beneficiaire")
+      //   .orderBy("id", "desc");
 
       return response.status(200).json({ error: false, data: sortie });
     } catch (error) {

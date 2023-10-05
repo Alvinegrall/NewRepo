@@ -1,5 +1,6 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Article from "App/Models/Article";
+import Cycle from "App/Models/Cycle";
 import Entre from "App/Models/Entre";
 import Fournisseur from "App/Models/Fournisseur";
 import Log from "App/Models/Log";
@@ -7,7 +8,10 @@ import Log from "App/Models/Log";
 export default class EntresController {
   public async register({ request, response }: HttpContextContract) {
     try {
-      const { marque, code_article, fournisseur_id, qte } = request.body();
+      const { marque, code_article, fournisseur_id, qte, cycle_code } =
+        request.body();
+
+      const cycle = await Cycle.findByOrFail("code", cycle_code);
 
       const fournisseur = await Fournisseur.findByOrFail("id", fournisseur_id);
       //   const beneficiaire = await Beneficiaire.findByOrFail("id", beneficiaire_id);
@@ -20,11 +24,12 @@ export default class EntresController {
         (entre.qte = qte),
         (entre.marque = marque);
       entre.code = Date.now().toString(32);
+      entre.cycleId = cycle.id;
 
       await entre.save();
       article.qteBefore = article.qte;
       article.qte = Number(article.qte) + Number(qte);
-      
+
       if (Number(article.stock_alerte) < Number(article.qte)) {
         article.is_alert = false;
       }
@@ -40,6 +45,7 @@ export default class EntresController {
           fournisseur.name),
         (logs.sourceName = "entre");
       logs.sourceId = entre.id;
+      logs.cycleId = cycle.id;
 
       await logs.save();
 
@@ -55,13 +61,22 @@ export default class EntresController {
       });
     }
   }
-  public async getAll({ response }: any) {
+  public async getAll({ response, params }: any) {
     try {
+      const cycle = await Cycle.findByOrFail("code", params.cycle_code);
+
       const entre = await Entre.query()
-      .where("is_active",true)
+        .where("is_active", true)
+        .where("cycle_id", cycle.id)
         .preload("article")
         .preload("fournisseur")
-        .orderBy("id", "desc")
+        .orderBy("id", "desc");
+
+      // const entre = await Entre.query()
+      //   .where("is_active", true)
+      //   .preload("article")
+      //   .preload("fournisseur")
+      //   .orderBy("id", "desc");
 
       return response.status(200).json({ error: false, data: entre });
     } catch (error) {
@@ -93,11 +108,8 @@ export default class EntresController {
   public async delete({ params, response }: any) {
     try {
       const val = await Entre.query().where("id", params.id).firstOrFail();
-
       val.isActive = false;
-
       await val.save();
-
       return response
         .status(200)
         .json({ error: false, data: "Supprimé avec success" });
