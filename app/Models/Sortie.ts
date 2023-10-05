@@ -8,6 +8,7 @@ import {
 } from "@ioc:Adonis/Lucid/Orm";
 import Article from "./Article";
 import Beneficiaire from "./Beneficiaire";
+import Cycle from "./Cycle";
 
 export default class Sortie extends BaseModel {
   @column({ isPrimary: true })
@@ -47,4 +48,6 @@ export default class Sortie extends BaseModel {
   public static getActive(query: any) {
     query.where("is_active", true);
   }
+  @belongsTo(() => Cycle)
+  public cycle: BelongsTo<typeof Cycle>;
 }

@@ -9,12 +9,18 @@ export default class extends BaseSchema {
       table.string("code").unique().notNullable();
       table.string("qte").notNullable();
       table.dateTime("date");
-      table.boolean("is_active").defaultTo(true)
+      table.boolean("is_active").defaultTo(true);
 
       table
         .integer("beneficiaire_id")
         .unsigned()
         .references("beneficiaires.id")
+        .onDelete("CASCADE");
+
+      table
+        .integer("cycle_id")
+        .unsigned()
+        .references("cycles.id")
         .onDelete("CASCADE");
 
       table

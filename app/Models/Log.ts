@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
-import { BaseModel, beforeFetch, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, beforeFetch, BelongsTo, belongsTo, column } from "@ioc:Adonis/Lucid/Orm";
+import Cycle from "./Cycle";
 
 export default class Log extends BaseModel {
   @column({ isPrimary: true })
@@ -36,4 +37,6 @@ export default class Log extends BaseModel {
   public static getActive(query: any) {
     query.where("is_active", true);
   }
+  @belongsTo(() => Cycle)
+  public cycle: BelongsTo<typeof Cycle>;
 }

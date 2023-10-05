@@ -8,8 +8,5 @@ export default class extends BaseSeeder {
             email: 'alvine@hydrac.com',
             password: '12345',
           })
-      
+        }
   }
-
-  }
-

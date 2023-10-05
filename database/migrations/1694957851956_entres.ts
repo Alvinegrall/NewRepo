@@ -18,6 +18,12 @@ export default class extends BaseSchema {
         .references("fournisseurs.id")
         .onDelete("CASCADE");
 
+        table
+        .integer("cycle_id")
+        .unsigned()
+        .references("cycles.id")
+        .onDelete("CASCADE");
+
       table
         .integer("article_id")
         .unsigned()
