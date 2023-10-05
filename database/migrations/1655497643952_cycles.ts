@@ -9,9 +9,10 @@ export default class extends BaseSchema {
       table.date("date_debut").notNullable();
       table.date("date_fin").notNullable();
       table.string("code").notNullable();
+      table.boolean("is_default").defaultTo(true);
       table.boolean("is_active").defaultTo(true);
       table.boolean("is_archive").defaultTo(false);
-
+      table.boolean("is_passed").defaultTo(false);
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

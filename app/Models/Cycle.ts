@@ -18,6 +18,12 @@ export default class Cycle extends BaseModel {
   public code: string;
 
   @column()
+  public isPassed: boolean;
+
+  @column()
+  public isDefault: boolean;
+
+  @column()
   public isActive: boolean;
 
   @column()

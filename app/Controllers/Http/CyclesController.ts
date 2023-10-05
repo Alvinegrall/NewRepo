@@ -60,4 +60,22 @@ export default class CyclesController {
         .json({ error: true, message: "Erreur lors de la création" });
     }
   }
+
+  public async getActive({ response }: any) {
+    try {
+      const cycles = await Cycle.query()
+        .where("is_active", true)
+        .where("is_passed", false)
+        .preload("entres")
+        .preload("sortie")
+        .preload("logs")
+        .firstOrFail();
+
+      return response.status(200).json({ error: false, data: cycles });
+    } catch (error) {
+      return response
+        .status(500)
+        .json({ error: true, message: "Erreur lors de la création" });
+    }
+  }
 }

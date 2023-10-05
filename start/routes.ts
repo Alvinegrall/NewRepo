@@ -32,8 +32,8 @@ Route.group(() => {
   Route.get("/article/stats/all", "HomePageDataController.getAllStatistics");
   Route.delete("/article/:id/delete", "ArticlesController.delete");
 
-  Route.post("/entre", "EntresController.register");
-  Route.get("/entre", "EntresController.getAll");
+  Route.post("/entre/:cycle_code", "EntresController.register");
+  Route.get("/entre/:cycle_code/all", "EntresController.getAll");
   Route.get("/entre/:code", "EntresController.getOne");
   Route.delete("/entre/:id/delete", "EntresController.delete");
 
@@ -57,14 +57,20 @@ Route.group(() => {
   Route.get("/magasin/:id", "MagasinsController.getOne");
   Route.delete("/magasin/:id/delete", "MagasinsController.delete");
 
-  Route.get("/logs", "LogsController.getAll");
+  Route.get("/logs/:cycle_code/all", "LogsController.getAll");
   Route.delete("/logs/:id/delete", "LogsController.delete");
   Route.get("/home-page-data", "HomePageDataController.getHomePageData");
 
-  Route.post("/sortie", "SortiesController.register");
-  Route.get("/sortie", "SortiesController.getAll");
+  Route.post("/sortie/:cycle_code", "SortiesController.register");
+  Route.get("/sortie/:cycle_code/all", "SortiesController.getAll");
   Route.get("/sortie/:code", "SortiesController.getOne");
   Route.delete("/sortie/:id/delete", "SortiesController.delete");
+
+  Route.post("/cycles", "CyclesController.register");
+  Route.get("/cycles", "CyclesController.getAll");
+  Route.get("/cycles/active", "CyclesController.getActive");
+  Route.get("/cycles/:cycle_code/show", "CyclesController.getOne");
+  // Route.delete("/sortie/:id/delete", "CyclesController.delete");
 })
   .prefix("api/v1")
   .middleware("auth");
