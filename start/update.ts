@@ -112,9 +112,7 @@ const updateDatabase = async () => {
           tableArticles.rows.push(userData);
         });
 
-        cycles.entres.forEach((elt) => {
-          console.log("elt", elt.fournisseur.name);
-          
+        cycles.entres.forEach((elt) => {          
           const userData = [ elt.article.name, elt.qte];
           tableEntre.rows.push(userData);
         });
@@ -160,7 +158,7 @@ const updateDatabase = async () => {
         (cycle.dateDebut = DateTimeHelpers.now()),
           (cycle.dateFin = DateTimeHelpers.addMinutes(
             DateTimeHelpers.now(),
-            3
+            30
           )),
           (cycle.code = code);
 

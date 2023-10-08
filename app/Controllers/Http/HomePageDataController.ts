@@ -88,7 +88,7 @@ export default class ArticlesController {
           q.preload("article");
           q.preload("beneficiaire");
         })
-        .paginate(1, 10);
+        .paginate(1, 200);
 
       // const cycles = await Cycle.query()
       //   .where("is_active", true)
