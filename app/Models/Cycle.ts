@@ -15,6 +15,9 @@ export default class Cycle extends BaseModel {
   public dateFin: string;
 
   @column()
+  public rapport: string;
+
+  @column()
   public code: string;
 
   @column()

@@ -29,6 +29,7 @@ Route.group(() => {
   Route.get("/article", "ArticlesController.getAll");
   Route.get("/article/:code", "ArticlesController.getOne");
   Route.post("/article/stats", "HomePageDataController.getStatistics");
+  Route.get("/archives", "HomePageDataController.getAllArchive");
   Route.get("/article/stats/all", "HomePageDataController.getAllStatistics");
   Route.delete("/article/:id/delete", "ArticlesController.delete");
 

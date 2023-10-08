@@ -9,6 +9,7 @@ export default class extends BaseSchema {
       table.dateTime("date_debut").notNullable();
       table.dateTime("date_fin").notNullable();
       table.string("code").notNullable();
+      table.string("rapport").nullable();
       table.boolean("is_default").defaultTo(true);
       table.boolean("is_active").defaultTo(true);
       table.boolean("is_archive").defaultTo(false);

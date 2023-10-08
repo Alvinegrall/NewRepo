@@ -79,6 +79,7 @@ export default class CyclesController {
         .preload("logs")
         .firstOrFail();
 
+
       return response.status(200).json({ error: false, data: cycles });
     } catch (error) {
       return response
