@@ -2,7 +2,7 @@
 module.exports = {
   apps: [
     {
-      name: 'Api le jeune agropreneur',
+      name: 'Api gestion de stock',
       script: './build/server.js',
       instances: '1',
       exec_mode: 'cluster',
