@@ -19,7 +19,7 @@ export default class extends BaseSeeder {
       //   .toISOString()
       //   .slice(0, 16)
       //   .replace("T", " "),
-      dateFin: DateTimeHelpers.addMinutes(DateTimeHelpers.now(), 3),
+      dateFin: DateTimeHelpers.addMonth(DateTimeHelpers.now(), 1),
       // add
       code: code,
     });

@@ -64,21 +64,21 @@ const updateDatabase = async () => {
             new Date(cycles.dateDebut).toLocaleString() +
             " ---- " +
             new Date(cycles.dateFin).toLocaleString(),
-          headers: ["Bénéficiaire", "Article", "Quantité"],
+          headers: ["Bénéficiaires", "Articles", "Quantité"],
           padding: 5,
           rows: [],
         };
 
         const tableArticles: any = {
           title: "Etat des articles à la fin du cycle",
-          headers: ["Article", "Quantité", "En alerte"],
+          headers: ["Articles", "Quantité", "En alerte"],
           padding: 5,
           rows: [],
         };
 
         const tableEntre: any = {
-          title: "Entrées / Livraisons",
-          headers: ["Article", "Quantité"],
+          title: "Entrées",
+          headers: ["Articles", "Quantité"],
           padding: 5,
           rows: [],
         };
@@ -156,9 +156,9 @@ const updateDatabase = async () => {
         const cycle = new Cycle();
         // date_debut is a DateTime
         (cycle.dateDebut = DateTimeHelpers.now()),
-          (cycle.dateFin = DateTimeHelpers.addMinutes(
+          (cycle.dateFin = DateTimeHelpers.addMonth(
             DateTimeHelpers.now(),
-            30
+            1
           )),
           (cycle.code = code);
 

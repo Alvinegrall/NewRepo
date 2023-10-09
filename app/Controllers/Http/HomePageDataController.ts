@@ -10,6 +10,7 @@ import Sortie from "App/Models/Sortie";
 import fs from "fs";
 import PDFDocument from "pdfkit-table";
 
+
 export default class ArticlesController {
   public async getHomePageData({ response }: HttpContextContract) {
     try {
