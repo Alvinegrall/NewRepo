@@ -24,6 +24,7 @@ Route.get("/", async () => {
   return { hello: "world" };
 });
 Route.post("api/v1/login", "AuthController.login");
+
 Route.group(() => {
   Route.post("/article", "ArticlesController.register");
   Route.get("/article", "ArticlesController.getAll");
