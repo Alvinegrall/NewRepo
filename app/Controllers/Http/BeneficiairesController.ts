@@ -72,11 +72,16 @@ export default class BeneficiairesController {
   public async delete({ params, response }: any) {
     try {
       const beneficiaire = await Beneficiaire.query()
-        .where("code", params.code)
+        .where("id", params.id)
         .preload("sortie")
         .firstOrFail();
 
-      return response.status(200).json({ error: false, data: beneficiaire });
+        beneficiaire.isActive = false;
+        await beneficiaire.save();
+
+        return response
+        .status(200)
+        .json({ error: false, data: "Supprimé avec success" });
     } catch (error) {
       return response.status(500).json({
         error: true,
