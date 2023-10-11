@@ -75,7 +75,7 @@ export default class EntresController {
       const entre = await Entre.query()
         .where("is_active", true)
         .where("cycle_id", cycle.id)
-        .preload("article")
+        .preload("article",(q)=>q.where("is_active",true))
         .preload("fournisseur")
         .orderBy("id", "desc");
 

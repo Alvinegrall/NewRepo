@@ -33,6 +33,7 @@ Route.group(() => {
   Route.get("/archives", "HomePageDataController.getAllArchive");
   Route.get("/article/stats/all", "HomePageDataController.getAllStatistics");
   Route.delete("/article/:id/delete", "ArticlesController.delete");
+  Route.put("/article/:id/update", "ArticlesController.update");
 
   Route.post("/entre", "EntresController.register");
   Route.get("/entre/:cycle_code/all", "EntresController.getAll");

@@ -107,6 +107,55 @@ export default class ArticlesController {
         .json({ error: true, message: "Erreur lors de la suppression" });
     }
   }
+
+  public async update({ response, request, params }: any) {
+    try {
+      const { name, stock_alerte, stock_securite, cat_id, magasin_id } =
+        request.body();
+
+      // update article
+
+      const article = await Article.query()
+        .where("id", params.id)
+        .firstOrFail();
+
+      if (article.name != name) {
+        article.name = name;
+      }
+
+      if (article.stock_alerte != stock_alerte) {
+        article.stock_alerte = stock_alerte;
+      }
+
+      if (article.stock_securite != stock_securite) {
+        article.stock_securite = stock_securite;
+      }
+
+      if (article.categoryId != cat_id) {
+        const cat = await Category.findByOrFail("id", cat_id);
+        article.categoryId = cat.id;
+      }
+
+      if (article.magasinId != magasin_id) {
+        const magasin = await Magasin.findByOrFail("id", magasin_id);
+        article.magasinId = magasin.id;
+      }
+
+      await article.save();
+      if (Number(article.stock_alerte) > Number(article.qte)) {
+        article.is_alert = true;
+      } else {
+        article.is_alert = false;
+      }
+      article.save();
+    } catch (error) {
+      console.log("error", error);
+
+      return response
+        .status(500)
+        .json({ error: true, message: "Erreur lors de la récupération" });
+    }
+  }
   // public async delete({ params, response }: any) {
   //   try {
   //     const beneficiaire = await Beneficiaire.query()

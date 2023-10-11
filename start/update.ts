@@ -70,7 +70,7 @@ const updateDatabase = async () => {
         };
 
         const tableArticles: any = {
-          title: "Etat des articles à la fin du cycle",
+          title: "Etats des articles à la fin du cycle",
           headers: ["Articles", "Quantité", "En alerte"],
           padding: 5,
           rows: [],
@@ -135,7 +135,7 @@ const updateDatabase = async () => {
           message
             .from("tsagueyvesthibaut@gmail.com")
             .to("tsagueyvesthibaut@gmail.com")
-            .subject("Raport et etat des stocks")
+            .subject("Rapport et etats des stocks")
             .attach(path);
         });
         element.isPassed = true;
