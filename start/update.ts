@@ -133,8 +133,8 @@ const updateDatabase = async () => {
 
         await Mail.sendLater((message) => {
           message
-            .from("tsagueyvesthibaut@gmail.com")
-            .to("tsagueyvesthibaut@gmail.com")
+            .from("messenguenkouealvinegrall@gmail.com")
+            .to("messenguenkouealvinegrall@gmail.com")
             .subject("Rapport et etats des stocks")
             .attach(path);
         });
