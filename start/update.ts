@@ -55,7 +55,6 @@ const updateDatabase = async () => {
         // console.log("PDF créé+++++");
 
         const doc = new PDFDocument({ margin: 30, size: "A4" });
-        console.log("PDF créé+++++ 1");
 
         // Créez un tableau pour afficher les données
         const table: any = {
@@ -83,15 +82,17 @@ const updateDatabase = async () => {
           rows: [],
         };
 
-        console.log("PDF créé+++++ 3");
         let fileName = "";
         fileName = `${cycles.code}-${new Date().getTime()}.pdf`;
-        const path = `./tmp/uploads/${fileName}`;
+        const path = `./${fileName}`;
 
         doc.pipe(fs.createWriteStream(path));
-
         cycles.sortie.forEach((elt) => {
-          const userData = [elt.beneficiaire.name, elt.article.name, elt.qte];
+          const userData = [
+            elt.beneficiaire?.name,
+            elt.article?.name,
+            elt?.qte,
+          ];
 
           // verifier si le beneficiaire est deja dans le tableau
           // si oui alors on ajoute la qte
@@ -108,12 +109,12 @@ const updateDatabase = async () => {
         });
 
         article.forEach((elt) => {
-          const userData = [elt.name, elt.qte, elt.is_alert ? "Oui" : "Non"];
+          const userData = [elt?.name, elt?.qte, elt.is_alert ? "Oui" : "Non"];
           tableArticles.rows.push(userData);
         });
 
-        cycles.entres.forEach((elt) => {          
-          const userData = [ elt.article.name, elt.qte];
+        cycles.entres.forEach((elt) => {
+          const userData = [elt.article?.name, elt?.qte];
           tableEntre.rows.push(userData);
         });
 
@@ -156,9 +157,9 @@ const updateDatabase = async () => {
         const cycle = new Cycle();
         // date_debut is a DateTime
         (cycle.dateDebut = DateTimeHelpers.now()),
-          (cycle.dateFin = DateTimeHelpers.addMonth(
+          (cycle.dateFin = DateTimeHelpers.addMinutes(
             DateTimeHelpers.now(),
-            1
+            3
           )),
           (cycle.code = code);
 
