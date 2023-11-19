@@ -10,7 +10,6 @@ import Sortie from "App/Models/Sortie";
 import fs from "fs";
 import PDFDocument from "pdfkit-table";
 
-
 export default class ArticlesController {
   public async getHomePageData({ response }: HttpContextContract) {
     try {
@@ -84,6 +83,7 @@ export default class ArticlesController {
     try {
       const cycle = await Cycle.query()
         .where("is_active", true)
+        .andWhere("is_passed", true)
         .preload("entres", (q) => q.preload("article"))
         .preload("sortie", (q) => {
           q.preload("article");
