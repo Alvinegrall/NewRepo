@@ -88,8 +88,7 @@ export default class ArticlesController {
         .preload("sortie", (q) => {
           q.preload("article");
           q.preload("beneficiaire");
-        })
-        .paginate(1, 200);
+        });
 
       // const cycles = await Cycle.query()
       //   .where("is_active", true)
@@ -199,15 +198,15 @@ export default class ArticlesController {
 
       return response.ok({
         error: false,
-        cycle: cycle.all(),
+        cycle: cycle,
         data: {
-          cycle: cycle.all(),
-          total: cycle.total,
-          current_page: cycle.currentPage,
-          has_more_pages: cycle.hasMorePages,
-          first_page: cycle.firstPage,
-          last_page: cycle.lastPage,
-          is_empty: cycle.isEmpty,
+          cycle: cycle,
+          // total: cycle.total,
+          // current_page: cycle.currentPage,
+          // has_more_pages: cycle.hasMorePages,
+          // first_page: cycle.firstPage,
+          // last_page: cycle.lastPage,
+          // is_empty: cycle.isEmpty,
         },
       });
       // return response.status(200).json({ error: false, data: cycle });
