@@ -130,12 +130,13 @@ const updateDatabase = async () => {
         //   columnsSize: [200, 100, 100],
         // });
         // done!
+        // messenguenkouealvinegrall@gmail.com
         doc.end();
 
         await Mail.sendLater((message) => {
           message
-            .from("messenguenkouealvinegrall@gmail.com")
-            .to("messenguenkouealvinegrall@gmail.com")
+            .from("tsagueyvesthibaut@gmail.com")
+            .to("tsagueyvesthibaut@gmail.com")
             .subject("Rapport et etats des stocks")
             .attach(path);
         });
