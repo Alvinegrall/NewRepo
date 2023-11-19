@@ -84,7 +84,7 @@ const updateDatabase = async () => {
 
         let fileName = "";
         fileName = `${cycles.code}-${new Date().getTime()}.pdf`;
-        const path = `./${fileName}`;
+        const path = `./uploads/${fileName}`;
 
         doc.pipe(fs.createWriteStream(path));
         cycles.sortie.forEach((elt) => {
@@ -135,8 +135,8 @@ const updateDatabase = async () => {
 
         await Mail.sendLater((message) => {
           message
-            .from("tsagueyvesthibaut@gmail.com")
-            .to("tsagueyvesthibaut@gmail.com")
+            .from("messenguenkouealvinegrall@gmail.com")
+            .to("messenguenkouealvinegrall@gmail.com")
             .subject("Rapport et etats des stocks")
             .attach(path);
         });
@@ -158,9 +158,9 @@ const updateDatabase = async () => {
         const cycle = new Cycle();
         // date_debut is a DateTime
         (cycle.dateDebut = DateTimeHelpers.now()),
-          (cycle.dateFin = DateTimeHelpers.addMinutes(
+          (cycle.dateFin = DateTimeHelpers.addMonth(
             DateTimeHelpers.now(),
-            3
+            1
           )),
           (cycle.code = code);
 
