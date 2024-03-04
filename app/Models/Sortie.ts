@@ -35,6 +35,12 @@ export default class Sortie extends BaseModel {
   @column()
   public articleId: number;
 
+  @column()
+  public userCreate: number;
+
+  @column()
+  public userDelete: number;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 

@@ -34,6 +34,11 @@ export default class Entre extends BaseModel {
 
   @column()
   public date: DateTime;
+  @column()
+  public userCreate: number;
+
+  @column()
+  public userDelete: number;
 
   @column({ serialize: Boolean })
   public isActive: boolean;

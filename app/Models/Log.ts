@@ -12,6 +12,12 @@ export default class Log extends BaseModel {
   @column()
   public description: String;
 
+  @column()
+  public userCreate: number;
+
+  @column()
+  public userDelete: number;
+
   @column({ serialize: Boolean })
   public isActive: boolean;
 

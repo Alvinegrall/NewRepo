@@ -6,11 +6,16 @@ import Log from "App/Models/Log";
 import Magasin from "App/Models/Magasin";
 
 export default class ArticlesController {
-  public async register({ request, response }: HttpContextContract) {
+  public async register({ request, response,auth }: HttpContextContract) {
     try {
       const { name, stock_alerte, stock_securite, cat_id, magasin_id } =
         request.body();
-
+        if (!auth.user) {
+          return response.unauthorized({
+            error: true,
+            message: "Invalid credentials",
+          });
+        }
       const cat = await Category.findByOrFail("id", cat_id);
       const magasin = await Magasin.findByOrFail("id", magasin_id);
 
@@ -22,6 +27,7 @@ export default class ArticlesController {
         (article.stock_securite = stock_securite),
         (article.categoryId = cat.id);
       article.magasinId = magasin.id;
+      article.userCreate = auth?.user.id
 
       if (Number(stock_alerte) > 0) {
         article.is_alert = true;

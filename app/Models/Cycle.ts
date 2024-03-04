@@ -10,6 +10,11 @@ export default class Cycle extends BaseModel {
 
   @column()
   public dateDebut: string;
+  @column()
+  public userCreate: number;
+
+  @column()
+  public userDelete: number;
 
   @column()
   public dateFin: string;

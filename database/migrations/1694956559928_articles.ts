@@ -15,6 +15,8 @@ export default class extends BaseSchema {
       table.boolean("is_active").defaultTo(true);
       table.integer("qte").notNullable().defaultTo(0);
       table.integer("qte_before").notNullable().defaultTo(0);
+      table.integer('user_create')
+      table.integer('user_delete')
       table
         .integer("category_id")
         .unsigned()

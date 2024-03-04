@@ -9,6 +9,12 @@ export default class Beneficiaire extends BaseModel {
   @column()
   public name: string
 
+  @column()
+  public userCreate: number;
+
+  @column()
+  public userDelete: number;
+
   @column({ serialize: Boolean })
   public isActive: boolean;
 

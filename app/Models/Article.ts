@@ -34,6 +34,12 @@ export default class Article extends BaseModel {
   public stock_alerte: string;
 
   @column()
+  public userCreate: number;
+
+  @column()
+  public userDelete: number;
+
+  @column()
   public stock_securite: string;
 
   @column({ serialize: Boolean })

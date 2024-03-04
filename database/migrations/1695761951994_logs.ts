@@ -7,6 +7,8 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments("id");
       table.string("name");
+      table.integer('user_create')
+      table.integer('user_delete')
       table.string("description");
       table.boolean("status");
       table.boolean("is_active").defaultTo(true);

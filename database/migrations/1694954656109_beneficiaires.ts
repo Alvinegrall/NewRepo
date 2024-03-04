@@ -8,6 +8,8 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('name')
       table.boolean("is_active").defaultTo(true);
+      table.integer('user_create')
+      table.integer('user_delete')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

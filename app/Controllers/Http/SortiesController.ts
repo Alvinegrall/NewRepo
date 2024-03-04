@@ -7,10 +7,18 @@ import Log from "App/Models/Log";
 import Sortie from "App/Models/Sortie";
 
 export default class SortiesController {
-  public async register({ request, response }: HttpContextContract) {
+  public async register({auth, request, response }: HttpContextContract) {
     try {
       const { code_article, beneficiaire_id, qte, date, cycle_code } =
         request.body();
+
+
+        if (!auth.user) {
+          return response.unauthorized({
+            error: true,
+            message: "Invalid credentials",
+          });
+        }
       //   const fournisseur = await Fournisseur.findByOrFail("id", fournisseur_id);
 
       const cycle = await Cycle.query().where("code", cycle_code).firstOrFail();
@@ -36,6 +44,7 @@ export default class SortiesController {
       sortie.articleId = article.id;
       sortie.date = date;
       sortie.cycleId = cycle.id;
+      sortie.userCreate = auth.user?.id;
 
       await sortie.save();
 

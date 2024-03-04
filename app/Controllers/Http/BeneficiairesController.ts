@@ -4,13 +4,20 @@ import Beneficiaire from "App/Models/Beneficiaire";
 import Log from "App/Models/Log";
 
 export default class BeneficiairesController {
-  public async register({ request, response }: HttpContextContract) {
+  public async register({ auth,request, response }: HttpContextContract) {
     try {
+      if (!auth.user) {
+        return response.unauthorized({
+          error: true,
+          message: "Invalid credentials",
+        });
+      }
       const { name } = request.body();
 
       const beneficiaire = new Beneficiaire();
 
       beneficiaire.name = name;
+      beneficiaire.userCreate = auth.user.id;
 
       await beneficiaire.save();
 

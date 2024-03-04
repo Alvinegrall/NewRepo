@@ -4,13 +4,19 @@ import Category from "App/Models/Category";
 import Log from "App/Models/Log";
 
 export default class CategoriesController {
-  public async register({ request, response }: HttpContextContract) {
+  public async register({ auth,request, response }: HttpContextContract) {
     try {
       const { name } = request.body();
-
+      if (!auth.user) {
+        return response.unauthorized({
+          error: true,
+          message: "Invalid credentials",
+        });
+      }
       const categorie = new Category();
 
       categorie.name = name;
+      categorie.userCreate = auth.user.id;
 
       await categorie.save();
 

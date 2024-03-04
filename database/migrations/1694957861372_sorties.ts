@@ -9,6 +9,8 @@ export default class extends BaseSchema {
       table.string("code").unique().notNullable();
       table.string("qte").notNullable();
       table.dateTime("date");
+      table.integer('user_create')
+      table.integer('user_delete')
       table.boolean("is_active").defaultTo(true);
 
       table

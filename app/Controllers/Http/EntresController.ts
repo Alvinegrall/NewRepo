@@ -6,10 +6,17 @@ import Fournisseur from "App/Models/Fournisseur";
 import Log from "App/Models/Log";
 
 export default class EntresController {
-  public async register({ request, response }: HttpContextContract) {
+  public async register({ auth,request, response }: HttpContextContract) {
     try {
       const { marque, code_article, fournisseur_id, qte, cycle_code } =
         request.body();
+
+        if (!auth.user) {
+          return response.unauthorized({
+            error: true,
+            message: "Invalid credentials",
+          });
+        }
 
       const cycle = await Cycle.query().where("code", cycle_code).firstOrFail();
 
@@ -29,6 +36,7 @@ export default class EntresController {
       (entre.fournisseurId = fournisseur.id),
         (entre.articleId = article.id),
         (entre.qte = qte),
+        entre.userCreate = auth.user?.id,
         (entre.marque = marque);
       entre.code = Date.now().toString(32);
       entre.cycleId = cycle.id;

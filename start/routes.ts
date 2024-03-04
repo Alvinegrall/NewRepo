@@ -77,6 +77,12 @@ Route.group(() => {
   Route.get("/cycles/active", "CyclesController.getActive");
   Route.get("/cycles/:cycle_code/show", "CyclesController.getOne");
   // Route.delete("/sortie/:id/delete", "CyclesController.delete");
+  // Route.delete("/sortie/:id/delete", "CyclesController.delete");
+  // Route.delete("/sortie/:id/delete", "CyclesController.delete");
+  Route.get("/profile", "AuthController.profile");
+  Route.post("/user/create-user", "AuthController.createUser");
+  Route.get("/users/get-all", "AuthController.getAllUsers");
+  Route.delete("/users/:id/delete", "AuthController.deleteUser");
 })
   .prefix("api/v1")
   .middleware("auth");

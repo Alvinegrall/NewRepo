@@ -14,6 +14,8 @@ export default class extends BaseSchema {
       table.boolean("is_active").defaultTo(true);
       table.boolean("is_archive").defaultTo(false);
       table.boolean("is_passed").defaultTo(false);
+      table.integer('user_create')
+      table.integer('user_delete')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

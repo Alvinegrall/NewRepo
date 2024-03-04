@@ -3,13 +3,20 @@ import Log from "App/Models/Log";
 import Magasin from "App/Models/Magasin";
 
 export default class MagasinsController {
-  public async register({ request, response }: HttpContextContract) {
+  public async register({ auth,request, response }: HttpContextContract) {
     try {
       const { name } = request.body();
 
+      if (!auth.user) {
+        return response.unauthorized({
+          error: true,
+          message: "Invalid credentials",
+        });
+      }
       const magasin = new Magasin();
 
       magasin.name = name;
+      magasin.userCreate = auth.user.id;
 
       await magasin.save();
 

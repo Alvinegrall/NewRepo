@@ -2,13 +2,19 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Fournisseur from "App/Models/Fournisseur";
 
 export default class FournisseursController {
-  public async register({ request, response }: HttpContextContract) {
+  public async register({ auth,request, response }: HttpContextContract) {
     try {
       const { name } = request.body();
-
+      if (!auth.user) {
+        return response.unauthorized({
+          error: true,
+          message: "Invalid credentials",
+        });
+      }
       const fournisseur = new Fournisseur();
 
       fournisseur.name = name;
+      fournisseur.userCreate = auth.user.id;
 
       await fournisseur.save();
 
