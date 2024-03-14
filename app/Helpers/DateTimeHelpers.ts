@@ -44,6 +44,26 @@ class DateTimeHelpers {
 
     return formattedNewDateTime;
   }
+
+  public static addDays(dates: any, days: any) {
+    const originalDateTime = new Date(dates);
+    const newDateTime = new Date(
+      originalDateTime.getTime() + days * 60 * 24 * 60000
+    );
+    const formattedNewDateTime = `${newDateTime.getFullYear()}-${String(
+      newDateTime.getMonth() + 1
+    ).padStart(2, "0")}-${String(newDateTime.getDate()).padStart(
+      2,
+      "0"
+    )} ${String(newDateTime.getHours()).padStart(2, "0")}:${String(
+      newDateTime.getMinutes()
+    ).padStart(2, "0")}:${String(newDateTime.getSeconds()).padStart(2, "0")}`;
+    if (days == 0) {
+      const datas = formattedNewDateTime.split(" ")[0];
+      return datas + " 00:00:00";
+    }
+    return formattedNewDateTime;
+  }
 }
 
 export default DateTimeHelpers;

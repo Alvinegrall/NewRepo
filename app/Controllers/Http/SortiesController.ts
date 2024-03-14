@@ -1,4 +1,5 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import DateTimeHelpers from "App/Helpers/DateTimeHelpers";
 
 import Article from "App/Models/Article";
 import Beneficiaire from "App/Models/Beneficiaire";
@@ -7,18 +8,23 @@ import Log from "App/Models/Log";
 import Sortie from "App/Models/Sortie";
 
 export default class SortiesController {
-  public async register({auth, request, response }: HttpContextContract) {
+  public async register({ auth, request, response }: HttpContextContract) {
     try {
-      const { code_article, beneficiaire_id, qte, date, cycle_code } =
-        request.body();
+      const {
+        code_article,
+        beneficiaire_id,
+        qte,
+        date,
+        cycle_code,
+        is_conforme,
+      } = request.body();
 
-
-        if (!auth.user) {
-          return response.unauthorized({
-            error: true,
-            message: "Invalid credentials",
-          });
-        }
+      if (!auth.user) {
+        return response.unauthorized({
+          error: true,
+          message: "Invalid credentials",
+        });
+      }
       //   const fournisseur = await Fournisseur.findByOrFail("id", fournisseur_id);
 
       const cycle = await Cycle.query().where("code", cycle_code).firstOrFail();
@@ -29,7 +35,7 @@ export default class SortiesController {
           message: "Ce cycle est cloturé",
         });
       }
-      
+
       const beneficiaire = await Beneficiaire.findByOrFail(
         "id",
         beneficiaire_id
@@ -45,6 +51,7 @@ export default class SortiesController {
       sortie.date = date;
       sortie.cycleId = cycle.id;
       sortie.userCreate = auth.user?.id;
+      // sortie.isConforme = is_conforme
 
       await sortie.save();
 
@@ -70,7 +77,10 @@ export default class SortiesController {
       const logs = new Log();
       (logs.name = "Creation"),
         (logs.description =
-          "Vous avez effectué une sortie de <b> " +
+          "<b> " +
+          auth.user?.name +
+          " </b>" +
+          " à effectué une sortie de <b> " +
           article.name +
           "</b> <b>( " +
           qte +
@@ -154,6 +164,83 @@ export default class SortiesController {
       return response
         .status(500)
         .json({ error: true, message: "Erreur lors de la suppression" });
+    }
+  }
+
+  public async getAllPaginate({ response, request, params }: any) {
+    try {
+      const {
+        page = 1,
+        per_page = 10,
+        category = null,
+        search_key,
+        search_value,
+        start_date,
+        end_date,
+        limit_date,
+        source_name,
+        beneficiaire_id,
+        article_id,
+        source_ref,
+        type,
+      } = request.qs();
+
+      const cycle = await Cycle.findByOrFail("code", params.cycle_code);
+      let query: any;
+
+      query = Sortie.query()
+        .where("is_active", true)
+        .where("cycle_id", cycle.id)
+        .preload("article")
+        .preload("beneficiaire")
+        .orderBy("id", "desc");
+
+      if (start_date) {
+        query.where("date", ">=", start_date);
+      }
+      if (end_date) {
+        query.where("date", "<=", end_date);
+      }
+
+      if(beneficiaire_id){
+        query.where("beneficiaire_id", beneficiaire_id);
+      }
+
+      if(article_id){
+        query.where("article_id", article_id);
+      }
+
+      if (limit_date && !limit_date.includes("all")) {
+        const limited_date = DateTimeHelpers.addDays(
+          DateTimeHelpers.now(),
+          limit_date
+        );
+        query.where("created_at", ">=", limited_date);
+      }
+      // if (type && type !== "all") {
+      //   query.where("is_alert", type);
+      // }
+      const sorties = await query.paginate(page, per_page);
+
+      return response.status(200).json({
+        error: false,
+        sorties: sorties.all(),
+        data: {
+          sorties: sorties.all(),
+          total: sorties.total,
+          current_page: sorties.currentPage,
+          has_more_pages: sorties.hasMorePages,
+          first_page: sorties.firstPage,
+          last_page: sorties.lastPage,
+          is_empty: sorties.isEmpty,
+        },
+      });
+    } catch (error) {
+      console.log("error", error);
+
+      return response
+        .status(500)
+        .json({ error: true, message: "Erreur lors de la récupération" });
     }
   }
 }

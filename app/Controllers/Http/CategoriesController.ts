@@ -4,7 +4,7 @@ import Category from "App/Models/Category";
 import Log from "App/Models/Log";
 
 export default class CategoriesController {
-  public async register({ auth,request, response }: HttpContextContract) {
+  public async register({ auth, request, response }: HttpContextContract) {
     try {
       const { name } = request.body();
       if (!auth.user) {
@@ -23,7 +23,12 @@ export default class CategoriesController {
       const logs = new Log();
       (logs.name = "Creation"),
         (logs.description =
-          "Vous avez crée un une catégorie <b> " + categorie.name + " </b>"),
+          "<b> " +
+          auth.user?.name +
+          " </b>" +
+          "à crée un une catégorie <b> " +
+          categorie.name +
+          " </b>"),
         (logs.sourceName = "Category");
       logs.sourceId = categorie.id;
 

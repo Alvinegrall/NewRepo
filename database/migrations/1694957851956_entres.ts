@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.string("marque");
       table.dateTime("date");
       table.boolean("is_active").defaultTo(true)
+      table.boolean("is_conforme").defaultTo(true)
       table.integer('user_create')
       table.integer('user_delete')
 

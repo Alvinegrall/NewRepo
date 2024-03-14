@@ -31,6 +31,12 @@ export default class Article extends BaseModel {
   public code: string;
 
   @column()
+  public stockConforme: string;
+
+  @column()
+  public stockNonConforme: string;
+
+  @column()
   public stock_alerte: string;
 
   @column()

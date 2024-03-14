@@ -43,6 +43,9 @@ export default class Entre extends BaseModel {
   @column({ serialize: Boolean })
   public isActive: boolean;
 
+  @column()
+  public isConforme: boolean;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 

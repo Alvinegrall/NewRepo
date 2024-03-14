@@ -6,17 +6,24 @@ import Fournisseur from "App/Models/Fournisseur";
 import Log from "App/Models/Log";
 
 export default class EntresController {
-  public async register({ auth,request, response }: HttpContextContract) {
+  public async register({ auth, request, response }: HttpContextContract) {
     try {
-      const { marque, code_article, fournisseur_id, qte, cycle_code } =
-        request.body();
+      const {
+        marque,
+        code_article,
+        fournisseur_id,
+        qte,
+        cycle_code,
+        is_conforme,
+        date,
+      } = request.body();
 
-        if (!auth.user) {
-          return response.unauthorized({
-            error: true,
-            message: "Invalid credentials",
-          });
-        }
+      if (!auth.user) {
+        return response.unauthorized({
+          error: true,
+          message: "Invalid credentials",
+        });
+      }
 
       const cycle = await Cycle.query().where("code", cycle_code).firstOrFail();
 
@@ -36,14 +43,30 @@ export default class EntresController {
       (entre.fournisseurId = fournisseur.id),
         (entre.articleId = article.id),
         (entre.qte = qte),
-        entre.userCreate = auth.user?.id,
+        (entre.userCreate = auth.user?.id),
         (entre.marque = marque);
+      entre.isConforme = is_conforme;
+      entre.date = date;
       entre.code = Date.now().toString(32);
       entre.cycleId = cycle.id;
 
-      await entre.save();
-      article.qteBefore = article.qte;
-      article.qte = Number(article.qte) + Number(qte);
+      if (is_conforme) {
+        article.qteBefore = article.qte;
+        article.qte = Number(article.qte) + Number(qte);
+        article.stockConforme = qte;
+        await entre.save();
+      } else {
+        if (article.qte < qte) {
+          return response.status(500).json({
+            error: true,
+            message: "La quantité n'est pas conforme",
+          });
+        }
+        article.stockNonConforme = (
+          Number(article.stockNonConforme) + Number(qte)
+        ).toString();
+        await entre.save();
+      }
 
       if (Number(article.stock_alerte) < Number(article.qte)) {
         article.is_alert = false;
@@ -54,7 +77,10 @@ export default class EntresController {
       const logs = new Log();
       (logs.name = "Creation"),
         (logs.description =
-          "Vous avez reçu une livraison de " +
+          "<b> " +
+          auth.user?.name +
+          " </b>" +
+          " à reçu une livraison de " +
           article.name +
           " de " +
           fournisseur.name),
@@ -82,8 +108,38 @@ export default class EntresController {
 
       const entre = await Entre.query()
         .where("is_active", true)
-        .where("cycle_id", cycle.id)
-        .preload("article",(q)=>q.where("is_active",true))
+        .andWhere("cycle_id", cycle.id)
+        .preload("article", (q) => q.where("is_active", true))
+        .preload("fournisseur")
+        .orderBy("id", "desc");
+
+      // const entre = await Entre.query()
+      //   .where("is_active", true)
+      //   .preload("article")
+      //   .preload("fournisseur")
+      //   .orderBy("id", "desc");
+
+      return response.status(200).json({ error: false, data: entre });
+    } catch (error) {
+      console.log("error", error);
+
+      return response
+        .status(500)
+        .json({ error: true, message: "Erreur lors de la récupération" });
+    }
+  }
+
+  
+  public async getAllNonconforme({ response, params }: any) {
+    4;
+    try {
+      const cycle = await Cycle.findByOrFail("code", params.cycle_code);
+
+      const entre = await Entre.query()
+        .where("is_active", true)
+        .andWhere("cycle_id", cycle.id)
+        .andWhere("is_conforme", false)
+        .preload("article", (q) => q.where("is_active", true))
         .preload("fournisseur")
         .orderBy("id", "desc");
 
@@ -123,6 +179,14 @@ export default class EntresController {
   public async delete({ params, response }: any) {
     try {
       const val = await Entre.query().where("id", params.id).firstOrFail();
+
+      const article = await Article.query()
+        .where("id", val.articleId)
+        .firstOrFail();
+      article.stockNonConforme = (
+        Number(article.stockNonConforme) - Number(val.qte)
+      ).toString();
+      await article.save();
       val.isActive = false;
       await val.save();
       return response

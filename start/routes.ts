@@ -28,6 +28,7 @@ Route.post("api/v1/login", "AuthController.login");
 Route.group(() => {
   Route.post("/article", "ArticlesController.register");
   Route.get("/article", "ArticlesController.getAll");
+  Route.get("/article-no-pagination", "ArticlesController.getAllNopagination");
   Route.get("/article/:code", "ArticlesController.getOne");
   Route.post("/article/stats", "HomePageDataController.getStatistics");
   Route.get("/archives", "HomePageDataController.getAllArchive");
@@ -37,6 +38,7 @@ Route.group(() => {
 
   Route.post("/entre", "EntresController.register");
   Route.get("/entre/:cycle_code/all", "EntresController.getAll");
+  Route.get("/entre/:cycle_code/all-non-conforme", "EntresController.getAllNonconforme");
   Route.get("/entre/:code", "EntresController.getOne");
   Route.delete("/entre/:id/delete", "EntresController.delete");
 
@@ -68,7 +70,8 @@ Route.group(() => {
   );
 
   Route.post("/sortie", "SortiesController.register");
-  Route.get("/sortie/:cycle_code/all", "SortiesController.getAll");
+  Route.get("/sortie/:cycle_code/all-no-pagination", "SortiesController.getAll");
+  Route.get("/sortie/:cycle_code/all", "SortiesController.getAllPaginate");
   Route.get("/sortie/:code", "SortiesController.getOne");
   Route.delete("/sortie/:id/delete", "SortiesController.delete");
 
@@ -76,6 +79,7 @@ Route.group(() => {
   Route.get("/cycles", "CyclesController.getAll");
   Route.get("/cycles/active", "CyclesController.getActive");
   Route.get("/cycles/:cycle_code/show", "CyclesController.getOne");
+  Route.get("/genaratePdf/:id", "ArticlesController.genaratePdf");
   // Route.delete("/sortie/:id/delete", "CyclesController.delete");
   // Route.delete("/sortie/:id/delete", "CyclesController.delete");
   // Route.delete("/sortie/:id/delete", "CyclesController.delete");
@@ -86,6 +90,8 @@ Route.group(() => {
 })
   .prefix("api/v1")
   .middleware("auth");
+
+
 
 // Route.get('/formation/:code', 'FormationsController.getone');
 // Route.get('/blog/:code', 'BlogsController.getone');

@@ -36,6 +36,9 @@ export default class Sortie extends BaseModel {
   public articleId: number;
 
   @column()
+  public isConforme: boolean;
+
+  @column()
   public userCreate: number;
 
   @column()
