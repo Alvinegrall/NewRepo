@@ -38,6 +38,8 @@ Route.group(() => {
 
   Route.post("/entre", "EntresController.register");
   Route.get("/entre/:cycle_code/all", "EntresController.getAll");
+  Route.get("/entre/:cycle_code/all-paginate", "EntresController.getAllPaginate");
+
   Route.get("/entre/:cycle_code/all-non-conforme", "EntresController.getAllNonconforme");
   Route.get("/entre/:code", "EntresController.getOne");
   Route.delete("/entre/:id/delete", "EntresController.delete");

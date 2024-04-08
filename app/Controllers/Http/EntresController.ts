@@ -1,4 +1,5 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import DateTimeHelpers from "App/Helpers/DateTimeHelpers";
 import Article from "App/Models/Article";
 import Cycle from "App/Models/Cycle";
 import Entre from "App/Models/Entre";
@@ -129,7 +130,6 @@ export default class EntresController {
     }
   }
 
-  
   public async getAllNonconforme({ response, params }: any) {
     4;
     try {
@@ -196,6 +196,95 @@ export default class EntresController {
       return response
         .status(500)
         .json({ error: true, message: "Erreur lors de la suppression" });
+    }
+  }
+
+  public async getAllPaginate({ response, request, params }: any) {
+    try {
+      const {
+        page = 1,
+        per_page = 10,
+        category = null,
+        search_key,
+        search_value,
+        start_date,
+        end_date,
+        limit_date,
+        source_name,
+        fournisseur_id,
+        article_id,
+        source_ref,
+        type,
+      } = request.qs();
+
+      const cycle = await Cycle.findByOrFail("code", params.cycle_code);
+      let query: any;
+
+      query = Entre.query()
+        .where("is_active", true)
+        .where("cycle_id", cycle.id)
+        .preload("article")
+        .preload("fournisseur")
+        .orderBy("id", "desc");
+
+      if (start_date) {
+        query.where("date", ">=", start_date);
+      }
+      if (end_date) {
+        query.where("date", "<=", end_date);
+      }
+
+      if (fournisseur_id) {
+        query.where("fournisseur_id", fournisseur_id);
+      }
+
+      if (article_id) {
+        query.where("article_id", article_id);
+      }
+
+      if (limit_date && !limit_date.includes("all")) {
+        const limited_date = DateTimeHelpers.addDays(
+          DateTimeHelpers.now(),
+          limit_date
+        );
+        query.where("created_at", ">=", limited_date);
+      }
+
+      if (search_value) {
+        query = Entre.query()
+          .where("is_active", true)
+          .where("cycle_id", cycle.id)
+          .whereHas("article", (q) => {
+            q.where("name", "like", `%${search_value}%`);
+          })
+          .preload("article")
+          .preload("fournisseur")
+          .orderBy("id", "desc");
+      }
+      // if (type && type !== "all") {
+      //   query.where("is_alert", type);
+      // }
+      const entres = await query.paginate(page, per_page);
+
+      return response.status(200).json({
+        error: false,
+        entres: entres.all(),
+        data: {
+          entres: entres.all(),
+          total: entres.total,
+          current_page: entres.currentPage,
+          has_more_pages: entres.hasMorePages,
+          first_page: entres.firstPage,
+          last_page: entres.lastPage,
+          is_empty: entres.isEmpty,
+        },
+      });
+    } catch (error) {
+      console.log("error", error);
+
+      return response
+        .status(500)
+        .json({ error: true, message: "Erreur lors de la récupération" });
     }
   }
 }

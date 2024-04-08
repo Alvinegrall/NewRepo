@@ -103,6 +103,12 @@ export default class ArticlesController {
       if (type && type !== "all") {
         query.where("is_alert", type);
       }
+      if (search_value) {
+        query
+          .andWhere("name", "like", "%" + search_value + "%");
+
+        
+      }
       const articles = await query.paginate(page, per_page);
 
       return response.status(200).json({

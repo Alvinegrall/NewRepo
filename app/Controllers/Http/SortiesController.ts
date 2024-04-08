@@ -202,12 +202,23 @@ export default class SortiesController {
         query.where("date", "<=", end_date);
       }
 
-      if(beneficiaire_id){
+      if (beneficiaire_id) {
         query.where("beneficiaire_id", beneficiaire_id);
       }
 
-      if(article_id){
+      if (article_id) {
         query.where("article_id", article_id);
+      }
+      if (search_value) {
+        query = Sortie.query()
+          .where("is_active", true)
+          .where("cycle_id", cycle.id)
+          .whereHas("article", (q) => {
+            q.where("name", "like", `%${search_value}%`);
+          })
+          .preload("article")
+          .preload("beneficiaire")
+          .orderBy("id", "desc");
       }
 
       if (limit_date && !limit_date.includes("all")) {
