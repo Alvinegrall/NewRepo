@@ -33,6 +33,12 @@ export default class Entre extends BaseModel {
   public marque: string;
 
   @column()
+  public prixU: string;
+
+  @column()
+  public prixT: string;
+
+  @column()
   public date: DateTime;
   @column()
   public userCreate: number;

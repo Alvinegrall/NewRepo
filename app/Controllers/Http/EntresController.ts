@@ -13,6 +13,8 @@ export default class EntresController {
         marque,
         code_article,
         fournisseur_id,
+        prix_u,
+        prix_t,
         qte,
         cycle_code,
         is_conforme,
@@ -46,6 +48,8 @@ export default class EntresController {
         (entre.qte = qte),
         (entre.userCreate = auth.user?.id),
         (entre.marque = marque);
+      entre.prixT = prix_t;
+      entre.prixU = prix_u;
       entre.isConforme = is_conforme;
       entre.date = date;
       entre.code = Date.now().toString(32);
