@@ -53,10 +53,10 @@ export default driveConfig({
       | files.
       |
       */
-      // root: Application.tmpPath('uploads'),
-      root: "/var/www/html/TRAVAUX/api-gestion-de-stock/uploads/",
+      root: Application.tmpPath('uploads'),
+      // root: "/var/www/html/TRAVAUX/api-gestion-de-stock/uploads/",
 
-      
+
       /*
       |--------------------------------------------------------------------------
       | Serve files - Local driver only

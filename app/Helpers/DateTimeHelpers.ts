@@ -64,6 +64,37 @@ class DateTimeHelpers {
     }
     return formattedNewDateTime;
   }
+
+  public static formatDate(date: any, isHour: boolean = false) {
+    const dateObj = new Date(date);
+
+    if (isHour) {
+      const options: any = {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      };
+      const dateLisible = dateObj.toLocaleDateString("fr-FR", options);
+
+      return dateLisible;
+    } else {
+      const options: any = {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      };
+      const dateLisible = dateObj.toLocaleDateString("fr-FR", options);
+
+      return dateLisible;
+    }
+  }
+  public static FormatDate(date: any) {
+    const newdate = new Date(date);
+    const readableDate = newdate.toLocaleString();
+    return readableDate.split(" ")[0];
+  }
 }
 
 export default DateTimeHelpers;
