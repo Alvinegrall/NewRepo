@@ -17,8 +17,7 @@
   "preloads": [
     "./start/routes",
     "./start/kernel",
-    "./start/tasks/reminder",
-    "./start/update"
+    "./start/tasks/reminder"
   ],
   "providers": [
     "./providers/AppProvider",

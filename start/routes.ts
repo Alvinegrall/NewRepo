@@ -75,6 +75,7 @@ Route.group(() => {
   Route.post("/sortie", "SortiesController.register");
   Route.get("/sortie/:cycle_code/all-no-pagination", "SortiesController.getAll");
   Route.get("/sortie/:cycle_code/all", "SortiesController.getAllPaginate");
+  Route.get("/sortie/:cycle_code/all-sortie-pdf", "SortiesController.genaratePdfSortie");
   Route.get("/sortie/:code", "SortiesController.getOne");
   Route.delete("/sortie/:id/delete", "SortiesController.delete");
 

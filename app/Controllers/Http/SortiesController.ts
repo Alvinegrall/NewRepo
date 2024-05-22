@@ -7,6 +7,9 @@ import Cycle from "App/Models/Cycle";
 import Log from "App/Models/Log";
 import Sortie from "App/Models/Sortie";
 
+import fs from "fs";
+import PDFDocument from "pdfkit-table";
+
 export default class SortiesController {
   public async register({ auth, request, response }: HttpContextContract) {
     try {
@@ -246,6 +249,136 @@ export default class SortiesController {
           is_empty: sorties.isEmpty,
         },
       });
+    } catch (error) {
+      console.log("error", error);
+
+      return response
+        .status(500)
+        .json({ error: true, message: "Erreur lors de la récupération" });
+    }
+  }
+  public async genaratePdfSortie({ response, request, params }: any) {
+    try {
+      const {
+        page = 1,
+        per_page = 10,
+        category = null,
+        search_key,
+        search_value,
+        start_date,
+        end_date,
+        limit_date,
+        source_name,
+        title,
+        beneficiaire_id,
+        article_id,
+        source_ref,
+        type,
+      } = request.qs();
+
+      const cycle = await Cycle.findByOrFail("code", params.cycle_code);
+      let query: any;
+
+      query = Sortie.query()
+        .where("is_active", true)
+        .where("cycle_id", cycle.id)
+        .preload("article")
+        .preload("beneficiaire")
+        .orderBy("id", "desc");
+
+      if (start_date) {
+        query.where("date", ">=", start_date);
+      }
+      if (end_date) {
+        query.where("date", "<=", end_date);
+      }
+
+      if (beneficiaire_id) {
+        query.where("beneficiaire_id", beneficiaire_id);
+      }
+
+      if (article_id) {
+        query.where("article_id", article_id);
+      }
+      if (search_value) {
+        query = Sortie.query()
+          .where("is_active", true)
+          .where("cycle_id", cycle.id)
+          .whereHas("article", (q) => {
+            q.where("name", "like", `%${search_value}%`);
+          })
+          .preload("article")
+          .preload("beneficiaire")
+          .orderBy("id", "desc");
+      }
+
+      if (limit_date && !limit_date.includes("all")) {
+        const limited_date = DateTimeHelpers.addDays(
+          DateTimeHelpers.now(),
+          limit_date
+        );
+        query.where("created_at", ">=", limited_date);
+      }
+      // if (type && type !== "all") {
+      //   query.where("is_alert", type);
+      // }
+      const sorties = await query;
+
+      // generate pdf file
+      const doc = new PDFDocument({ margin: 30, size: "A4" });
+
+      // Créez un tableau pour afficher les données
+      // const table: any = {
+      //   title: "Article en alerte :",
+      //   headers: ["Bénéficiaires", "Articles", "Quantité"],
+      //   padding: 5,
+      //   rows: [],
+      // };
+
+      const tableEntre: any = {
+        title: title ? title : "Sorties",
+        headers: ["No", "Date", "Article", "Quantité", "Bénéficiaire"],
+        padding: 5,
+        rows: [],
+      };
+
+      // const tableEntre: any = {
+      //   title: "Entrées",
+      //   headers: ["Articles", "Quantité"],
+      //   padding: 5,
+      //   rows: [],
+      // };
+
+      let fileName = "";
+      // fileName = `${new Date().getFullYear()}-${new Date().getTime()}.pdf`;
+      fileName = `Sortie-${new Date().getDay()}-${new Date().getMonth()}-${new Date().getFullYear()}.pdf`;
+      const path = `tmp/uploads/${fileName}`;
+
+      doc.pipe(fs.createWriteStream(path));
+
+      sorties.forEach((elt: Sortie, index) => {
+        const userData = [
+          index,
+          DateTimeHelpers.formatDate(elt.date),
+          elt?.article?.name,
+          elt?.qte,
+          elt?.beneficiaire?.name,
+        ];
+        tableEntre.rows.push(userData);
+      });
+
+      // A4 595.28 x 841.89 (portrait) (about width sizes)
+      // width
+
+      // await doc.table(table);
+      await doc.table(tableEntre);
+
+      doc.end();
+
+      return {
+        path: path,
+        fileName: `http://localhost:3333/uploads/${fileName}`,
+      };
     } catch (error) {
       console.log("error", error);
 
