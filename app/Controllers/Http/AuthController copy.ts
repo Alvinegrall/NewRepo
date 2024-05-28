@@ -1,7 +1,6 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Admin from "App/Models/Admin";
 import Cycle from "App/Models/Cycle";
-import CreateUserValidator from "App/Validators/CreateUserValidator";
 
 export default class AuthController {
   public async login({ auth, request, response }: HttpContextContract) {
@@ -79,27 +78,7 @@ export default class AuthController {
   }
   public async createUser({ auth, response, request }: HttpContextContract) {
     try {
-      // const { name, phone, email, password,role } = request.body();
-
-      const payload = await request
-        .validate(CreateUserValidator)
-        .then((data) => data)
-        .catch((error) => {
-          if (error.messages?.errors) {
-            return response.badRequest({
-              error: true,
-              message: error.messages.errors[0].message,
-            });
-          } else {
-            return response.badRequest({
-              error: true,
-              message:
-                "Une erreur est survenue lors de l'exécution de la requête",
-            });
-          }
-        });
-
-      if (payload) {
+      const { name, phone, email, password,role } = request.body();
       
       if (!auth.user) {
         return response.unauthorized({
@@ -109,15 +88,14 @@ export default class AuthController {
       }
 
       const admin = new Admin();
-      admin.name = payload.name;
+      admin.name = name;
       admin.userCreate = auth.user.id;
-      admin.phone = payload.phone;
-      admin.email = payload.email;
-      admin.password = payload.password;
+      admin.phone = phone;
+      admin.email = email;
+      admin.password = password;
       admin.rememberMeToken = null;
-      admin.role = payload.role
+      admin.role = role
       await admin.save();
-    }
     } catch {
       return response.unauthorized({
         error: true,
