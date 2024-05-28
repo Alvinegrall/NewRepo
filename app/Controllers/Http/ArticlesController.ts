@@ -8,32 +8,53 @@ import Mail from "@ioc:Adonis/Addons/Mail";
 import Category from "App/Models/Category";
 import Log from "App/Models/Log";
 import Magasin from "App/Models/Magasin";
+import ArticleValidator from "App/Validators/ArticleValidator";
 
 export default class ArticlesController {
   public async register({ request, response, auth }: HttpContextContract) {
     try {
-      const { name, stock_alerte, stock_securite, cat_id, magasin_id } =
-        request.body();
+      // const { name, stock_alerte, stock_securite, cat_id, magasin_id } =
+        // request.body();
       if (!auth.user) {
         return response.unauthorized({
           error: true,
           message: "Invalid credentials",
         });
       }
-      const cat = await Category.findByOrFail("id", cat_id);
-      const magasin = await Magasin.findByOrFail("id", magasin_id);
+
+      const payload = await request
+        .validate(ArticleValidator)
+        .then((data) => data)
+        .catch((error) => {
+          if (error.messages?.errors) {
+            return response.badRequest({
+              error: true,
+              message: error.messages.errors[0].message,
+            });
+          } else {
+            return response.badRequest({
+              error: true,
+              message:
+                "Une erreur est survenue lors de l'exécution de la requête",
+            });
+          }
+        });
+
+      if (payload) {
+      const cat = await Category.findByOrFail("id", payload.cat_id);
+      const magasin = await Magasin.findByOrFail("id", payload.magasin_id);
 
       const article = new Article();
 
-      (article.name = name),
+      (article.name = payload.name),
         (article.code = Date.now().toString(32)),
-        (article.stock_alerte = stock_alerte),
-        (article.stock_securite = stock_securite),
+        (article.stock_alerte = (payload.stock_alerte).toString()),
+        (article.stock_securite = (payload.stock_securite).toString()),
         (article.categoryId = cat.id);
       article.magasinId = magasin.id;
       article.userCreate = auth?.user.id;
 
-      if (Number(stock_alerte) > 0) {
+      if (Number(payload.stock_alerte) > 0) {
         article.is_alert = true;
       }
 
@@ -60,6 +81,7 @@ export default class ArticlesController {
         message: "Arcticle create successfully",
         data: article,
       });
+    }
     } catch (error) {
       return response.status(500).json({
         error: true,
