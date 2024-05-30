@@ -2,20 +2,40 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 import Category from "App/Models/Category";
 import Log from "App/Models/Log";
+import CreateCategorieValidator from "App/Validators/CreateCategorieValidator";
 
 export default class CategoriesController {
   public async register({ auth, request, response }: HttpContextContract) {
     try {
-      const { name } = request.body();
       if (!auth.user) {
         return response.unauthorized({
           error: true,
           message: "Invalid credentials",
         });
       }
+
+      const payload = await request
+      .validate(CreateCategorieValidator)
+      .then((data) => data)
+      .catch((error) => {
+        if (error.messages?.errors) {
+          return response.badRequest({
+            error: true,
+            message: error.messages.errors[0].message,
+          });
+        } else {
+          return response.badRequest({
+            error: true,
+            message:
+              "Une erreur est survenue lors de l'exécution de la requête",
+          });
+        }
+      });
+
+    if (payload) {
       const categorie = new Category();
 
-      categorie.name = name;
+      categorie.name = payload.name;
       categorie.userCreate = auth.user.id;
 
       await categorie.save();
@@ -38,6 +58,7 @@ export default class CategoriesController {
         error: false,
         data: categorie,
       });
+    }
     } catch (error) {
       return response.status(500).json({
         error: true,

@@ -1,19 +1,40 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Fournisseur from "App/Models/Fournisseur";
+import CreateFornisseurValidator from "App/Validators/CreateFornisseurValidator";
 
 export default class FournisseursController {
   public async register({ auth,request, response }: HttpContextContract) {
     try {
-      const { name } = request.body();
       if (!auth.user) {
         return response.unauthorized({
           error: true,
           message: "Invalid credentials",
         });
       }
+
+      const payload = await request
+      .validate(CreateFornisseurValidator)
+      .then((data) => data)
+      .catch((error) => {
+        if (error.messages?.errors) {
+          return response.badRequest({
+            error: true,
+            message: error.messages.errors[0].message,
+          });
+        } else {
+          return response.badRequest({
+            error: true,
+            message:
+              "Une erreur est survenue lors de l'exécution de la requête",
+          });
+        }
+      });
+
+    if (payload) {
+      
       const fournisseur = new Fournisseur();
 
-      fournisseur.name = name;
+      fournisseur.name = payload.name;
       fournisseur.userCreate = auth.user.id;
 
       await fournisseur.save();
@@ -22,6 +43,7 @@ export default class FournisseursController {
         error: false,
         data: fournisseur,
       });
+    }
     } catch (error) {
       return response.status(500).json({
         error: true,

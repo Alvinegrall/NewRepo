@@ -1,38 +1,58 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Log from "App/Models/Log";
 import Magasin from "App/Models/Magasin";
+import CreateMagasinValidator from "App/Validators/CreateMagasinValidator";
 
 export default class MagasinsController {
-  public async register({ auth,request, response }: HttpContextContract) {
+  public async register({ auth, request, response }: HttpContextContract) {
     try {
-      const { name } = request.body();
-
       if (!auth.user) {
         return response.unauthorized({
           error: true,
           message: "Invalid credentials",
         });
       }
-      const magasin = new Magasin();
 
-      magasin.name = name;
-      magasin.userCreate = auth.user.id;
+      const payload = await request
+        .validate(CreateMagasinValidator)
+        .then((data) => data)
+        .catch((error) => {
+          if (error.messages?.errors) {
+            return response.badRequest({
+              error: true,
+              message: error.messages.errors[0].message,
+            });
+          } else {
+            return response.badRequest({
+              error: true,
+              message:
+                "Une erreur est survenue lors de l'exécution de la requête",
+            });
+          }
+        });
 
-      await magasin.save();
+      if (payload) {
+        const magasin = new Magasin();
 
-      const logs = new Log();
-      (logs.name = "Creation"),
-        (logs.description =
-          "Vous avez crée un nouveau Magasin <b> " + magasin.name + " </b>"),
-        (logs.sourceName = "magasin");
-      logs.sourceId = magasin.id;
+        magasin.name = payload.name;
+        magasin.userCreate = auth.user.id;
 
-      await logs.save();
+        await magasin.save();
 
-      return response.status(200).json({
-        error: false,
-        data: magasin,
-      });
+        const logs = new Log();
+        (logs.name = "Creation"),
+          (logs.description =
+            "Vous avez crée un nouveau Magasin <b> " + magasin.name + " </b>"),
+          (logs.sourceName = "magasin");
+        logs.sourceId = magasin.id;
+
+        await logs.save();
+
+        return response.status(200).json({
+          error: false,
+          data: magasin,
+        });
+      }
     } catch (error) {
       return response.status(500).json({
         error: true,
